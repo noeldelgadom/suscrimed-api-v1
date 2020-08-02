@@ -9,7 +9,7 @@ module PriceScraperModule
 
     prices  = {}
     prices[:ahorro]       = scrape_ahorro(browser, ean)
-    # prices[:city_market]  = scrape_city_market(browser, ean)
+    prices[:city_market]  = scrape_city_market(browser, ean)
 
     byebug
     browser.close
@@ -23,10 +23,7 @@ module PriceScraperModule
 
   def scrape_city_market(browser, ean)
     puts 'Scrapeando City Market'
-    browser.goto 'https://www.citymarket.com.mx/'
-    browser.button(id: 'redirectCercaNo').click
-    browser.text_field(id: 'idSearch').set ean
-    browser.button(id: 'btnSearch').click
+    browser.goto 'https://www.lacomer.com.mx/lacomer/goBusqueda.action?succId=380&ver=mislistas&succFmt=200&criterio=' + ean + '#/' + ean
     price = clean_price(browser.span(class: 'precio_normal').text)
   end
 
