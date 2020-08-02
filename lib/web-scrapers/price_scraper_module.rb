@@ -4,14 +4,14 @@ module PriceScraperModule
   
   def self.scrape
     puts 'Starting Scrape'
-    # ean     = "1234567890123" # Fake EAN
+    ean     = "1234567890123" # Fake EAN
     # ean     = "7501109901890" # Pariet
-    ean     = "7501314704644" # Durater
+    # ean     = "7501314704644" # Durater
     browser = Watir::Browser.new
 
     prices  = {}
-    prices[:ahorro]       = scrape_ahorro(browser, ean)
-    # prices[:city_market]  = scrape_city_market(browser, ean)
+    # prices[:ahorro]       = scrape_ahorro(browser, ean)
+    prices[:city_market]  = scrape_city_market(browser, ean)
     # prices[:farmalisto]   = scrape_farmalisto(browser, ean)
     # prices[:fresko]       = scrape_fresko(browser, ean)
     # prices[:guadalajara]  = scrape_guadalajara(browser, ean)
@@ -30,7 +30,7 @@ module PriceScraperModule
   def scrape_city_market(browser, ean)
     puts 'Scrapeando City Market. EAN: ' + ean
     browser.goto 'https://www.lacomer.com.mx/lacomer/goBusqueda.action?succId=380&ver=mislistas&succFmt=200&criterio=' + ean + '#/' + ean
-    price = assign_price(browser.span(class: 'precio_normal'))
+    price = assign_price(browser.span(class: 'precio_normal'), browser.div(class: "sinresultados"))
   end
 
   def scrape_farmalisto(browser,ean)
