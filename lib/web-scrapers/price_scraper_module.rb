@@ -4,15 +4,15 @@ module PriceScraperModule
   
   def self.scrape
     puts 'Starting Scrape'
-    # ean     = "1234567890123" # Fake EAN
-    ean     = "7501109901890" # Pariet
+    ean     = "1234567890123" # Fake EAN
+    # ean     = "7501109901890" # Pariet
     # ean     = "7501314704644" # Durater
     browser = Watir::Browser.new
 
     prices  = {}
     # prices[:ahorro]       = scrape_ahorro(browser, ean)
     # prices[:city_market]  = scrape_city_market(browser, ean)
-    prices[:farmalisto]   = scrape_farmalisto(browser, ean)
+    # prices[:farmalisto]   = scrape_farmalisto(browser, ean)
     # prices[:fresko]       = scrape_fresko(browser, ean)
     # prices[:guadalajara]  = scrape_guadalajara(browser, ean)
 
@@ -37,7 +37,6 @@ module PriceScraperModule
     puts 'Scrapeando Farmalisto. EAN: ' + ean
     browser.goto 'https://www.farmalisto.com.mx/#/dffullscreen/query=' + ean + '&query_name=match_and'
     browser.div(class: 'df-header-title').wait_until(&:exists?)
-    puts 'going innnnnnnnnn'
     price = assign_price(browser.span(class: 'df-card__price'), browser.p(class: 'df-no-results'))
   end
 
@@ -50,7 +49,7 @@ module PriceScraperModule
   def scrape_guadalajara(browser, ean)
     puts 'Scrapeando Fresko. EAN: ' + ean
     browser.goto 'https://www.farmaciasguadalajara.com/SearchDisplay?storeId=10151&searchTerm=' + ean
-    price = assign_price(browser.span(class: 'price'))
+    price = assign_price(browser.span(class: 'price'), browser.div(class: 'widget_search_results'))
   end
 
   def assign_price(success_element, failure_element)
