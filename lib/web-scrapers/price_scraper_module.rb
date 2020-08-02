@@ -6,22 +6,31 @@ module PriceScraperModule
     puts 'Starting Scrape'
     ean     = "7501109901890"
     browser = Watir::Browser.new
-    scrape_ahorro(browser, ean)
+
+    prices  = {}
+    prices[:ahorro]       = scrape_ahorro(browser, ean)
+    # prices[:city_market]  = scrape_city_market(browser, ean)
+
+    byebug
     browser.close
   end
 
   def scrape_ahorro(browser, ean)
     puts 'Scrapeando Ahorro'
-    browser.goto 'https://www.fahorro.com/'
-    browser.text_field(id: 'search').set ean
-    browser.button(class: 'button').click
-    browser.li(class: 'item').click
+    browser.goto 'https://www.fahorro.com/catalogsearch/result/?q=' + ean
+    price = clean_price(browser.span(class: 'price').text)
+  end
 
-    if ean = browser.table(id: 'product-attribute-specs-table').tr(class: 'even').td.text
-      price = browser.span(class: 'price').text.gsub(/[^\d]/, '').to_f / 100
-    else
-      price = 9876543210        # If this shows, up it means the EAN on the page is NOT the one we are looking for
-    end
-    return price
+  def scrape_city_market(browser, ean)
+    puts 'Scrapeando City Market'
+    browser.goto 'https://www.citymarket.com.mx/'
+    browser.button(id: 'redirectCercaNo').click
+    browser.text_field(id: 'idSearch').set ean
+    browser.button(id: 'btnSearch').click
+    price = clean_price(browser.span(class: 'precio_normal').text)
+  end
+
+  def clean_price(text)
+    text.gsub(/[^\d]/, '').to_f / 100
   end
 end
