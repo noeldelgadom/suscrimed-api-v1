@@ -20,7 +20,9 @@ module PriceScraperModule
     # prices[:prixz]        = scrape_prixz(browser, ean)
     # prices[:san_pablo]    = scrape_san_pablo(browser, ean)
     # prices[:soriana]      = scrape_soriana(browser, ean)
-    
+
+    prices[:chedraui]      = scrape_chedraui(browser, ean)
+
     byebug
     prices = {
       ahorro:       111.0,
@@ -97,6 +99,13 @@ module PriceScraperModule
     price = assign_price(browser.ul(class: 'product__listing').span(class: 'price'), browser.div(class: 'searchEmptyPageMiddle-component'))
   end
 
+  def scrape_chedraui(browser, ean)
+    puts 'Scrapeando Chedraui. EAN: ' + ean
+    utc_12 = convert_ean_to_upc_12(ean)
+    puts ean
+    puts utc_12
+  end
+
   def assign_price(success_element, failure_element)
 
     if success_element.exists?
@@ -106,5 +115,9 @@ module PriceScraperModule
     else
       'Other Error'
     end
+  end
+
+  def convert_ean_to_upc_12(ean)
+    ean.chop
   end
 end
