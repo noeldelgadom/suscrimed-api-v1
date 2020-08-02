@@ -15,9 +15,19 @@ module PriceScraperModule
     # prices[:farmalisto]   = scrape_farmalisto(browser, ean)
     # prices[:fresko]       = scrape_fresko(browser, ean)
     # prices[:guadalajara]  = scrape_guadalajara(browser, ean)
+    # prices[:la_comer]     = scrape_la_comer(browser, ean)
+    # prices[:prixz]        = scrape_prixz(browser, ean)
 
     byebug
-    prices = {:ahorro=>111.0, :city_market=>222.0, :farmalisto=>333.0}
+    prices = {
+      ahorro:       111.0,
+      city_market:  222.0,
+      farmalisto:   333.0,
+      fresko:       444.0,
+      guadalajara:  555.00,
+      la_comer:     666.00,
+      prixz:        777.00
+    }
     browser.close
   end
 
@@ -50,6 +60,25 @@ module PriceScraperModule
     puts 'Scrapeando Fresko. EAN: ' + ean
     browser.goto 'https://www.farmaciasguadalajara.com/SearchDisplay?storeId=10151&searchTerm=' + ean
     price = assign_price(browser.span(class: 'price'), browser.div(class: 'widget_search_results'))
+  end
+
+  def scrape_la_comer(browser, ean)
+    puts 'Scrapeando La Comer. EAN: ' + ean
+    browser.goto 'https://www.lacomer.com.mx/lacomer/goBusqueda.action?succId=287&ver=mislistas&succFmt=100&criterio=' + ean + '#/' + ean
+    price = assign_price(browser.span(class: 'precio_normal'), browser.div(class: "sinresultados"))
+  end
+
+  def scrape_prixz(browser, ean)
+    puts 'Scrapeando Prixz. EAN: ' + ean
+    browser.goto 'https://www.prixz.com/?s=' + ean + '&post_type=product'
+
+    if browser.div(class: "ais-hits__empty").exists?
+      price = assign_price(browser.div(class: 'ais-hits--content'), browser.div(class: "ais-hits__empty"))
+    else
+      browser.div(class: 'ais-hits--content').h2.a.click
+      browser.p(class: 'price').ins.wait_until(&:exists?)
+      price = assign_price(browser.p(class: 'price').ins, browser.div(class: "ais-hits__empty"))
+    end
   end
 
   def assign_price(success_element, failure_element)
