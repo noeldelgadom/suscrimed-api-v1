@@ -4,9 +4,10 @@ module PriceScraperModule
   
   def self.scrape
     puts 'Starting Scrape'
-    # ean     = "1234567890123" # Fake EAN
-    ean     = "7501109901890" # Pariet
-    # ean     = "7501314704644" # Durater
+    ean     = "1234567890123" # Fake EAN
+    # ean     = "7501109901890" # Pariet
+    # ean     = "7501008494226" # Aspirina
+    # ean     = "7501299300367" # Sensibit
     browser = Watir::Browser.new
 
     prices  = {}
@@ -17,8 +18,9 @@ module PriceScraperModule
     # prices[:guadalajara]  = scrape_guadalajara(browser, ean)
     # prices[:la_comer]     = scrape_la_comer(browser, ean)
     # prices[:prixz]        = scrape_prixz(browser, ean)
-
-    prices[:san_pablo]        = scrape_san_pablo(browser, ean)
+    # prices[:san_pablo]    = scrape_san_pablo(browser, ean)
+    # prices[:soriana]      = scrape_soriana(browser, ean)
+    
     byebug
     prices = {
       ahorro:       111.0,
@@ -87,6 +89,12 @@ module PriceScraperModule
     puts 'Scrapeando San Pablo. EAN: ' + ean
     browser.goto 'https://www.farmaciasanpablo.com.mx/search/?text=' + ean
     price = assign_price(browser.p(class: 'item-prize'), browser.div(class: 'search-empty'))
+  end
+
+  def scrape_soriana(browser, ean)
+    puts 'Scrapeando Soriana. EAN: ' + ean
+    browser.goto 'https://www.soriana.com/soriana/es/search/?text=' + ean
+    price = assign_price(browser.ul(class: 'product__listing').span(class: 'price'), browser.div(class: 'searchEmptyPageMiddle-component'))
   end
 
   def assign_price(success_element, failure_element)
