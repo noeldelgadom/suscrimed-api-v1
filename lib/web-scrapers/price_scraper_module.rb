@@ -5,7 +5,7 @@ module PriceScraperModule
   def self.scrape
     puts 'Starting Scrape'
     ean     = "1234567890123" # Fake EAN
-    # ean     = "7501109901890" # Pariet
+    ean     = "7501109901890" # Pariet
     # ean     = "7501008494226" # Aspirina
     # ean     = "7501299300367" # Sensibit
     browser = Watir::Browser.new
@@ -101,9 +101,12 @@ module PriceScraperModule
 
   def scrape_chedraui(browser, ean)
     puts 'Scrapeando Chedraui. EAN: ' + ean
-    utc_12 = convert_ean_to_upc_12(ean)
-    puts ean
-    puts utc_12
+    browser.goto 'https://www.chedraui.com.mx/'
+    browser.text_field(class: 'search__form--input').click
+    browser.text_field(id: 'searchBox').set convert_ean_to_upc_12(ean)
+    browser.send_keys :enter
+    browser.header.wait_until(&:exists?)
+    price = assign_price(browser.p(class: 'price'), browser.div(class: 'search-empty'))
   end
 
   def assign_price(success_element, failure_element)
