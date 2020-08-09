@@ -6,9 +6,11 @@ module PriceScraperModule
     puts 'Starting Scrape'
     ean     = "1234567890123" # Fake EAN
     # ean     = "7501109901890" # Pariet
-    # ean     = "7501008494226" # Aspirina
+    ean     = "7501008494226" # Aspirina
     # ean     = "7501299300367" # Sensibit
-    browser = Watir::Browser.new
+
+    browser = Watir::Browser.new :chrome
+    # browser = Watir::Browser.new :chrome, headless: true
 
     prices  = {}
     # prices[:ahorro]       = scrape_ahorro(browser, ean)
@@ -22,21 +24,26 @@ module PriceScraperModule
     # prices[:soriana]      = scrape_soriana(browser, ean)
     # prices[:chedraui]     = scrape_chedraui(browser, ean)
     # prices[:superama]     = scrape_superama(browser, ean)
+    prices[:walmart]      = scrape_walmart(browser, ean)
+    # prices[:sanborns]     = scrape_sanborns(browser, ean)
 
-    prices[:walmart]     = scrape_walmart(browser, ean)
-
+    browser.close
     byebug
     prices = {
-      ahorro:       111.0,
-      city_market:  222.0,
-      farmalisto:   333.0,
-      fresko:       444.0,
-      guadalajara:  555.00,
-      la_comer:     666.00,
-      prixz:        777.00,
-      san_pablo:    888.00
+      ahorro:       111.1,
+      city_market:  222.2,
+      farmalisto:   333.3,
+      fresko:       444.4,
+      guadalajara:  555.5,
+      la_comer:     666.6,
+      prixz:        777.7,
+      san_pablo:    888.8,
+      soriana:      'Not In Store',
+      chedraui:     999.9,
+      superama:     'Not In Store',
+      walmart:      0.0,
+      sanborns:     'Other Error'
     }
-    browser.close
   end
 
   def scrape_ahorro(browser, ean)
@@ -121,7 +128,15 @@ module PriceScraperModule
     puts 'Scrapeando WalMart. EAN: ' + ean
     browser.goto 'https://super.walmart.com.mx/productos?Ntt=' + convert_ean_to_upc_14(ean)
     browser.div(id: 'scrollToTopComponent').wait_until(&:exists?)
+    browser.p(class: 'price-and-promotions_currentPrice__XT_Iz').wait_while { |a| a.text == '$--' } if browser.p(class: 'price-and-promotions_currentPrice__XT_Iz').exists?
     assign_price(browser.p(class: 'price-and-promotions_currentPrice__XT_Iz'), browser.div(class: 'no-results_container__75YGT'))
+  end
+
+  def scrape_sanborns(browser, ean)
+    puts 'Scrapeando Sanbornns. EAN: ' + ean
+    browser.goto 'https://www.sanborns.com.mx/resultados/q=' + ean + '/1'
+    price = assign_price(browser.span(class: 'preciodesc'), browser.div(class: 'resultado'))
+    price.class.name == 'Float' ? (price * 100).round(2) : price
   end
 
   def assign_price(success_element, failure_element)
