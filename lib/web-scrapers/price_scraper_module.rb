@@ -2,37 +2,37 @@ module PriceScraperModule
   
   # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape
   
-  def self.scrape
+  def self.scrape(ean)
     ean     = "1234567890123" # Fake EAN
     # ean     = "7501109901890" # Pariet
     # ean     = "7501008494226" # Aspirina
     # ean     = "7501299300367" # Sensibit
 
-    # browser = Watir::Browser.new :chrome
-    browser = Watir::Browser.new :chrome, headless: true
+    # # browser = Watir::Browser.new :chrome
+    # browser = Watir::Browser.new :chrome, headless: true
 
-    puts'--------------------------------------------------------------------------------'
-    puts'--------------------------------------------------------------------------------'
-    puts Time.now.to_s + ' Starting Scrape for EAN: ' + ean
-    prices  = {}
-    prices[:ahorro]       = scrape_ahorro(browser, ean)
-    prices[:city_market]  = scrape_city_market(browser, ean)
-    prices[:farmalisto]   = scrape_farmalisto(browser, ean)
-    prices[:fresko]       = scrape_fresko(browser, ean)
-    prices[:guadalajara]  = scrape_guadalajara(browser, ean)
-    prices[:la_comer]     = scrape_la_comer(browser, ean)
-    prices[:prixz]        = scrape_prixz(browser, ean)
-    prices[:san_pablo]    = scrape_san_pablo(browser, ean)
-    prices[:soriana]      = scrape_soriana(browser, ean)
-    prices[:chedraui]     = scrape_chedraui(browser, ean)
-    prices[:superama]     = scrape_superama(browser, ean)
-    prices[:walmart]      = scrape_walmart(browser, ean)
-    prices[:sanborns]     = scrape_sanborns(browser, ean)
+    # puts'--------------------------------------------------------------------------------'
+    # puts'--------------------------------------------------------------------------------'
+    # puts Time.now.to_s + ' Starting Scrape for EAN: ' + ean
+    # prices  = {}
+    # prices[:ahorro]       = scrape_ahorro(browser, ean)
+    # prices[:city_market]  = scrape_city_market(browser, ean)
+    # prices[:farmalisto]   = scrape_farmalisto(browser, ean)
+    # prices[:fresko]       = scrape_fresko(browser, ean)
+    # prices[:guadalajara]  = scrape_guadalajara(browser, ean)
+    # prices[:la_comer]     = scrape_la_comer(browser, ean)
+    # prices[:prixz]        = scrape_prixz(browser, ean)
+    # prices[:san_pablo]    = scrape_san_pablo(browser, ean)
+    # prices[:soriana]      = scrape_soriana(browser, ean)
+    # prices[:chedraui]     = scrape_chedraui(browser, ean)
+    # prices[:superama]     = scrape_superama(browser, ean)
+    # prices[:walmart]      = scrape_walmart(browser, ean)
+    # prices[:sanborns]     = scrape_sanborns(browser, ean)
 
-    puts Time.now.to_s + ' Ending Scrape for EAN: ' + ean 
-    puts'--------------------------------------------------------------------------------'
-    browser.close
-    byebug
+    # puts Time.now.to_s + ' Ending Scrape for EAN: ' + ean 
+    # puts'--------------------------------------------------------------------------------'
+    # browser.close
+
     prices = {
       ahorro:       111.1,
       city_market:  222.2,
