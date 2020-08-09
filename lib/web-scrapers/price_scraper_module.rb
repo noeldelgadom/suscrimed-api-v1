@@ -5,23 +5,25 @@ module PriceScraperModule
   def self.scrape
     puts 'Starting Scrape'
     ean     = "1234567890123" # Fake EAN
-    ean     = "7501109901890" # Pariet
+    # ean     = "7501109901890" # Pariet
     # ean     = "7501008494226" # Aspirina
     # ean     = "7501299300367" # Sensibit
     browser = Watir::Browser.new
 
     prices  = {}
-    prices[:ahorro]       = scrape_ahorro(browser, ean)
-    prices[:city_market]  = scrape_city_market(browser, ean)
-    prices[:farmalisto]   = scrape_farmalisto(browser, ean)
-    prices[:fresko]       = scrape_fresko(browser, ean)
-    prices[:guadalajara]  = scrape_guadalajara(browser, ean)
-    prices[:la_comer]     = scrape_la_comer(browser, ean)
-    prices[:prixz]        = scrape_prixz(browser, ean)
-    prices[:san_pablo]    = scrape_san_pablo(browser, ean)
-    prices[:soriana]      = scrape_soriana(browser, ean)
-    prices[:chedraui]     = scrape_chedraui(browser, ean)
-    prices[:superama]     = scrape_superama(browser, ean)
+    # prices[:ahorro]       = scrape_ahorro(browser, ean)
+    # prices[:city_market]  = scrape_city_market(browser, ean)
+    # prices[:farmalisto]   = scrape_farmalisto(browser, ean)
+    # prices[:fresko]       = scrape_fresko(browser, ean)
+    # prices[:guadalajara]  = scrape_guadalajara(browser, ean)
+    # prices[:la_comer]     = scrape_la_comer(browser, ean)
+    # prices[:prixz]        = scrape_prixz(browser, ean)
+    # prices[:san_pablo]    = scrape_san_pablo(browser, ean)
+    # prices[:soriana]      = scrape_soriana(browser, ean)
+    # prices[:chedraui]     = scrape_chedraui(browser, ean)
+    # prices[:superama]     = scrape_superama(browser, ean)
+
+    prices[:walmart]     = scrape_walmart(browser, ean)
 
     byebug
     prices = {
@@ -110,9 +112,16 @@ module PriceScraperModule
   end
 
   def scrape_superama(browser, ean)
-    puts 'Scrapeando Soriana. EAN: ' + ean
+    puts 'Scrapeando Superama. EAN: ' + ean
     browser.goto 'https://www.superama.com.mx/buscar/' + convert_ean_to_upc_13(ean)
     assign_price(browser.p(class: 'upcPrice'), browser.span(class: 'numeroResultadosTotal'))
+  end
+
+  def scrape_walmart(browser, ean)
+    puts 'Scrapeando WalMart. EAN: ' + ean
+    browser.goto 'https://super.walmart.com.mx/productos?Ntt=' + convert_ean_to_upc_14(ean)
+    browser.div(id: 'scrollToTopComponent').wait_until(&:exists?)
+    assign_price(browser.p(class: 'price-and-promotions_currentPrice__XT_Iz'), browser.div(class: 'no-results_container__75YGT'))
   end
 
   def assign_price(success_element, failure_element)
@@ -132,5 +141,9 @@ module PriceScraperModule
 
   def convert_ean_to_upc_13(ean)
     '0' + convert_ean_to_upc_12(ean)
+  end
+
+  def convert_ean_to_upc_14(ean)
+    '00' + convert_ean_to_upc_12(ean)
   end
 end
