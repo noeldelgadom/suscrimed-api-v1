@@ -4,17 +4,16 @@ module PriceScraperModule
   
   def self.scrape
     ean     = "1234567890123" # Fake EAN
-    ean     = "7501109901890" # Pariet
+    # ean     = "7501109901890" # Pariet
     # ean     = "7501008494226" # Aspirina
     # ean     = "7501299300367" # Sensibit
 
-    browser = Watir::Browser.new :chrome
-    # browser = Watir::Browser.new :chrome, headless: true
+    # browser = Watir::Browser.new :chrome
+    browser = Watir::Browser.new :chrome, headless: true
 
     puts'--------------------------------------------------------------------------------'
     puts'--------------------------------------------------------------------------------'
-    puts 'Starting Scrape of EAN: ' + ean
-    puts 'Starting Time: ' + Time.now.to_s
+    puts Time.now.to_s + ' Starting Scrape for EAN: ' + ean
     prices  = {}
     prices[:ahorro]       = scrape_ahorro(browser, ean)
     prices[:city_market]  = scrape_city_market(browser, ean)
@@ -30,8 +29,7 @@ module PriceScraperModule
     prices[:walmart]      = scrape_walmart(browser, ean)
     prices[:sanborns]     = scrape_sanborns(browser, ean)
 
-    puts 'Ending Scrape of EAN: ' + ean
-    puts 'Ending Time: ' + Time.now.to_s
+    puts Time.now.to_s + ' Ending Scrape for EAN: ' + ean 
     puts'--------------------------------------------------------------------------------'
     browser.close
     byebug
@@ -53,44 +51,44 @@ module PriceScraperModule
   end
 
   def scrape_ahorro(browser, ean)
-    puts Time.now.to_s + '  Scrapeando Ahorro'
+    puts Time.now.to_s + ' Scrapeando Ahorro'
     browser.goto 'https://www.fahorro.com/catalogsearch/result/?q=' + ean
     assign_price(browser.span(class: 'price'), browser.p(class: 'note-msg'))
   end
 
   def scrape_city_market(browser, ean)
-    puts Time.now.to_s + '  Scrapeando City Market'
+    puts Time.now.to_s + ' Scrapeando City Market'
     browser.goto 'https://www.lacomer.com.mx/lacomer/goBusqueda.action?succId=380&ver=mislistas&succFmt=200&criterio=' + ean + '#/' + ean
     assign_price(browser.span(class: 'precio_normal'), browser.div(class: "sinresultados"))
   end
 
   def scrape_farmalisto(browser,ean)
-    puts Time.now.to_s + '  Scrapeando Farmalisto'
+    puts Time.now.to_s + ' Scrapeando Farmalisto'
     browser.goto 'https://www.farmalisto.com.mx/#/dffullscreen/query=' + ean + '&query_name=match_and'
     browser.div(class: 'df-header-title').wait_until(&:exists?)
     assign_price(browser.span(class: 'df-card__price'), browser.p(class: 'df-no-results'))
   end
 
   def scrape_fresko(browser, ean)
-    puts Time.now.to_s + '  Scrapeando Fresko'
+    puts Time.now.to_s + ' Scrapeando Fresko'
     browser.goto 'https://www.lacomer.com.mx/lacomer/goBusqueda.action?succId=137&ver=mislistas&succFmt=100&criterio=' + ean + '#/' + ean
     assign_price(browser.span(class: 'precio_normal'), browser.div(class: "sinresultados"))
   end
 
   def scrape_guadalajara(browser, ean)
-    puts Time.now.to_s + '  Scrapeando Guadalajara'
+    puts Time.now.to_s + ' Scrapeando Guadalajara'
     browser.goto 'https://www.farmaciasguadalajara.com/SearchDisplay?storeId=10151&searchTerm=' + ean
     assign_price(browser.span(class: 'price'), browser.div(class: 'widget_search_results'))
   end
 
   def scrape_la_comer(browser, ean)
-    puts Time.now.to_s + '  Scrapeando La Comer'
+    puts Time.now.to_s + ' Scrapeando La Comer'
     browser.goto 'https://www.lacomer.com.mx/lacomer/goBusqueda.action?succId=287&ver=mislistas&succFmt=100&criterio=' + ean + '#/' + ean
     assign_price(browser.span(class: 'precio_normal'), browser.div(class: "sinresultados"))
   end
 
   def scrape_prixz(browser, ean)
-    puts Time.now.to_s + '  Scrapeando Prixz'
+    puts Time.now.to_s + ' Scrapeando Prixz'
     browser.goto 'https://www.prixz.com/?s=' + ean + '&post_type=product'
     browser.div(id: 'algolia-hits').wait_until(&:exists?)
 
@@ -104,19 +102,19 @@ module PriceScraperModule
   end
 
   def scrape_san_pablo(browser, ean)
-    puts Time.now.to_s + '  Scrapeando San Pablo'
+    puts Time.now.to_s + ' Scrapeando San Pablo'
     browser.goto 'https://www.farmaciasanpablo.com.mx/search/?text=' + ean
     assign_price(browser.p(class: 'item-prize'), browser.div(class: 'search-empty'))
   end
 
   def scrape_soriana(browser, ean)
-    puts Time.now.to_s + '  Scrapeando Soriana'
+    puts Time.now.to_s + ' Scrapeando Soriana'
     browser.goto 'https://www.soriana.com/soriana/es/search/?text=' + ean
     assign_price(browser.ul(class: 'product__listing').span(class: 'price'), browser.div(class: 'searchEmptyPageMiddle-component'))
   end
 
   def scrape_chedraui(browser, ean)
-    puts Time.now.to_s + '  Scrapeando Chedraui'
+    puts Time.now.to_s + ' Scrapeando Chedraui'
     browser.goto 'https://www.chedraui.com.mx/'
     browser.text_field(class: 'search__form--input').click
     browser.text_field(id: 'searchBox').set convert_ean_to_upc_12(ean)
@@ -126,13 +124,13 @@ module PriceScraperModule
   end
 
   def scrape_superama(browser, ean)
-    puts Time.now.to_s + '  Scrapeando Superama'
+    puts Time.now.to_s + ' Scrapeando Superama'
     browser.goto 'https://www.superama.com.mx/buscar/' + convert_ean_to_upc_13(ean)
     assign_price(browser.p(class: 'upcPrice'), browser.span(class: 'numeroResultadosTotal'))
   end
 
   def scrape_walmart(browser, ean)
-    puts Time.now.to_s + '  Scrapeando WalMart'
+    puts Time.now.to_s + ' Scrapeando WalMart'
     browser.goto 'https://super.walmart.com.mx/productos?Ntt=' + convert_ean_to_upc_14(ean)
     browser.div(id: 'scrollToTopComponent').wait_until(&:exists?)
     browser.p(class: 'price-and-promotions_currentPrice__XT_Iz').wait_while { |a| a.text == '$--' } unless browser.div(class: 'no-results_container__75YGT').exists?
@@ -140,7 +138,7 @@ module PriceScraperModule
   end
 
   def scrape_sanborns(browser, ean)
-    puts Time.now.to_s + '  Scrapeando Sanbornns'
+    puts Time.now.to_s + ' Scrapeando Sanbornns'
     browser.goto 'https://www.sanborns.com.mx/resultados/q=' + ean + '/1'
     price = assign_price(browser.span(class: 'preciodesc'), browser.div(class: 'resultado'))
     price.class.name == 'Float' ? (price * 100).round(2) : price
