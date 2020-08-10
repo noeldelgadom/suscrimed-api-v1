@@ -1,21 +1,23 @@
 module PriceScraperModule
   
-  # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape
+  # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean
   
-  def self.scrape(ean)
+  def self.scrape_ean
+    prices  = {}
+
     ean     = "1234567890123" # Fake EAN
-    # ean     = "7501109901890" # Pariet
+    ean     = "7501109901890" # Pariet
     # ean     = "7501008494226" # Aspirina
     # ean     = "7501299300367" # Sensibit
 
-    # # browser = Watir::Browser.new :chrome
+    browser = Watir::Browser.new :chrome
     # browser = Watir::Browser.new :chrome, headless: true
 
-    # puts'--------------------------------------------------------------------------------'
-    # puts'--------------------------------------------------------------------------------'
-    # puts Time.now.to_s + ' Starting Scrape for EAN: ' + ean
-    # prices  = {}
+    puts'--------------------------------------------------------------------------------'
+    puts'--------------------------------------------------------------------------------'
+    puts Time.now.to_s + ' Starting Scrape for EAN: ' + ean
     # prices[:ahorro]       = scrape_ahorro(browser, ean)
+    # prices[:by_price]     = scrape_by_price(browser, ean)
     # prices[:city_market]  = scrape_city_market(browser, ean)
     # prices[:farmalisto]   = scrape_farmalisto(browser, ean)
     # prices[:fresko]       = scrape_fresko(browser, ean)
@@ -29,12 +31,14 @@ module PriceScraperModule
     # prices[:walmart]      = scrape_walmart(browser, ean)
     # prices[:sanborns]     = scrape_sanborns(browser, ean)
 
-    # puts Time.now.to_s + ' Ending Scrape for EAN: ' + ean 
-    # puts'--------------------------------------------------------------------------------'
-    # browser.close
+    puts Time.now.to_s + ' Ending Scrape for EAN: ' + ean 
+    puts'--------------------------------------------------------------------------------'
+    browser.close
 
+    byebug
     prices = {
       ahorro:       111.1,
+      by_price:     444.4,
       city_market:  222.2,
       farmalisto:   333.3,
       fresko:       444.4,
@@ -54,6 +58,17 @@ module PriceScraperModule
     puts Time.now.to_s + ' Scrapeando Ahorro'
     browser.goto 'https://www.fahorro.com/catalogsearch/result/?q=' + ean
     assign_price(browser.span(class: 'price'), browser.p(class: 'note-msg'))
+  end
+
+  def scrape_by_price(browser, ean)
+    puts Time.now.to_s + ' Scrapeando By Price'
+    start_url = 'https://byprice.com/busqueda?search-submit=&q=' + ean
+    browser.goto start_url
+    if browser.div(class: 'byprice-filters-title').p.wait_until(&:exists?).text.gsub(/[^\d]/, '').to_i > 0
+      browser.button(class: 'byprice-button-2').wait_until(&:exists?).click until browser.url[20,8] != 'busqueda'
+      browser.div(class: 'byprice-cards-list-item').span(class: 'ByPrice-price-amount').wait_until(&:exists?)
+    end
+    assign_price(browser.div(class: 'byprice-cards-list-item').span(class: 'ByPrice-price-amount'), browser.div(class: 'byprice-filters-title'))
   end
 
   def scrape_city_market(browser, ean)
