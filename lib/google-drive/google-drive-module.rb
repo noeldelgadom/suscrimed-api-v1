@@ -4,7 +4,7 @@ module GoogleDriveModule
 
   require_relative '../web-scrapers/price_scraper_module.rb'
 
-  # reload! ; load "lib/google-drive/google-drive-module.rb" ; include GoogleDriveModule ; GoogleDriveModule.update_prices
+  # reload! ; load "lib/google-drive/google-drive-module.rb" ; include GoogleDriveModule ; GoogleDriveModule.update_competitor_prices
 
   def first_try
     session     = GoogleDrive::Session.from_service_account_key("config/api-keys/google-sheets-key.json")
@@ -19,22 +19,20 @@ module GoogleDriveModule
   end
 
   def self.update_competitor_prices
+    session     = GoogleDrive::Session.from_service_account_key("config/api-keys/google-sheets-key.json")
+    spreadsheet = session.spreadsheet_by_title("Competitor Prices")
+    worksheet   = spreadsheet.worksheets.first
+
     puts'--------------------------------------------------------------------------------'
     puts'--------------------------------------------------------------------------------'
     puts Time.now.to_s + ' Start Updating Prices'
-    # session     = GoogleDrive::Session.from_service_account_key("config/api-keys/google-sheets-key.json")
-    # spreadsheet = session.spreadsheet_by_title("Competitor Prices")
-    # worksheet   = spreadsheet.worksheets.first
 
-    # row = 2
-    # while worksheet[row,1] != ""
+    row     = 2
+    ean     = worksheet[row, 1] # Pariet
+    puts Time.now.to_s + ' Updating EAN: ' + ean
+    prices  = PriceScraperModule.scrape_ean(ean)
 
-      ean     = "7501109901890" # Pariet
-      puts ean
-      prices = PriceScraperModule.scrape_ean(ean)
 
-    #   row += 1
-    # end
     byebug
     puts Time.now.to_s + ' Finish Updating Prices'
     puts'--------------------------------------------------------------------------------'

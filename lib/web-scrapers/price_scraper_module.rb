@@ -2,19 +2,18 @@ module PriceScraperModule
   
   # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean
   
-  def self.scrape_ean
+  def self.scrape_ean(ean)
     prices  = {}
 
-    ean     = "1234567890123" # Fake EAN
-    ean     = "7501109901890" # Pariet
+    # ean     = "1234567890123" # Fake EAN
+    # ean     = "7501109901890" # Pariet
     # ean     = "7501008494226" # Aspirina
     # ean     = "7501299300367" # Sensibit
 
-    browser = Watir::Browser.new :chrome
+    # browser = Watir::Browser.new :chrome
     # browser = Watir::Browser.new :chrome, headless: true
 
-    puts'--------------------------------------------------------------------------------'
-    puts'--------------------------------------------------------------------------------'
+    puts'------------------'
     puts Time.now.to_s + ' Starting Scrape for EAN: ' + ean
     # prices[:ahorro]       = scrape_ahorro(browser, ean)
     # prices[:by_price]     = scrape_by_price(browser, ean)
@@ -32,10 +31,9 @@ module PriceScraperModule
     # prices[:sanborns]     = scrape_sanborns(browser, ean)
 
     puts Time.now.to_s + ' Ending Scrape for EAN: ' + ean 
-    puts'--------------------------------------------------------------------------------'
-    browser.close
+    puts'------------------'
+    # browser.close
 
-    byebug
     prices = {
       ahorro:       111.1,
       by_price:     444.4,
