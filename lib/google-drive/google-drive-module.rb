@@ -51,8 +51,7 @@ module GoogleDriveModule
       worksheet[row, 15]  = prices[:walmart]
       worksheet[row, 16]  = prices[:sanborns]  
       
-
-      worksheet.save if row % save_every_x_rows == 0
+      worksheet.save
 
       row += 1
     end
