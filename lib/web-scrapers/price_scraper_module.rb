@@ -35,7 +35,7 @@ module PriceScraperModule
     }
 
     # prices[:ahorro]       = PriceScraperModule.scrape_ahorro(browser, ean)
-    # prices[:by_price]     = PriceScraperModule.scrape_by_price(browser, ean)
+    prices[:by_price]     = PriceScraperModule.scrape_by_price(browser, ean)
     # prices[:city_market]  = PriceScraperModule.scrape_city_market(browser, ean)
     # prices[:farmalisto]   = PriceScraperModule.scrape_farmalisto(browser, ean)
     # prices[:fresko]       = PriceScraperModule.scrape_fresko(browser, ean)
@@ -66,13 +66,13 @@ module PriceScraperModule
 
   def self.scrape_by_price(browser, ean)
     puts Time.now.to_s + ' Scrapeando By Price'
-    start_url = 'https://byprice.com/busqueda?search-submit=&q=' + ean
-    browser.goto start_url
+    browser.goto 'https://byprice.com/busqueda?search-submit=&q=' + ean
     if browser.div(class: 'byprice-filters-title').p.wait_until(&:exists?).text.gsub(/[^\d]/, '').to_i > 0
       browser.button(class: 'byprice-button-2').wait_until(&:exists?).click until browser.url[20,8] != 'busqueda'
-      browser.div(class: 'byprice-cards-list-item').span(class: 'ByPrice-price-amount').wait_until(&:exists?)
+      success_element = browser.div(class: 'ItemView-full-coverage-message').exists? ? browser.a(class: 'byprice-cards-list-item') : browser.div(class: 'byprice-cards-list-item')
+      success_element = success_element.span(class: 'ByPrice-price-amount').wait_until(&:exists?)
     end
-    PriceScraperModule.assign_price(browser.div(class: 'byprice-cards-list-item').span(class: 'ByPrice-price-amount'), browser.div(class: 'byprice-filters-title'))
+    PriceScraperModule.assign_price(success_element, browser.div(class: 'byprice-filters-title'))
   end
 
   def self.scrape_city_market(browser, ean)
