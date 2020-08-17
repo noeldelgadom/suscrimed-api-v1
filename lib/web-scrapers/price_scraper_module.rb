@@ -2,13 +2,14 @@ module PriceScraperModule
   
   # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean
   
-  def self.scrape_ean(ean)
+  def self.scrape_ean
     prices  = {}
 
-    # ean     = "1234567890123" # Fake EAN
-    # ean     = "7501109901890" # Pariet
-    # ean     = "7501008494226" # Aspirina
+    ean     = "1234567890123" # Fake EAN
+    ean     = "7501109901890" # Pariet
+    # ean     = "7501008494226" # Aspirina Junior
     # ean     = "7501299300367" # Sensibit
+    # ean     = "7501573902782" # RANITIDINA
 
     puts'------------------'
     puts Time.now.to_s + ' Starting Scrape for EAN: ' + ean
@@ -33,26 +34,27 @@ module PriceScraperModule
       sanborns:     'Other Error'
     }
 
-    prices[:ahorro]       = PriceScraperModule.scrape_ahorro(browser, ean)
-    prices[:by_price]     = PriceScraperModule.scrape_by_price(browser, ean)
-    prices[:city_market]  = PriceScraperModule.scrape_city_market(browser, ean)
-    prices[:farmalisto]   = PriceScraperModule.scrape_farmalisto(browser, ean)
-    prices[:fresko]       = PriceScraperModule.scrape_fresko(browser, ean)
-    prices[:guadalajara]  = PriceScraperModule.scrape_guadalajara(browser, ean)
-    prices[:la_comer]     = PriceScraperModule.scrape_la_comer(browser, ean)
-    prices[:prixz]        = PriceScraperModule.scrape_prixz(browser, ean)
-    prices[:san_pablo]    = PriceScraperModule.scrape_san_pablo(browser, ean)
-    prices[:soriana]      = PriceScraperModule.scrape_soriana(browser, ean)
-    prices[:chedraui]     = PriceScraperModule.scrape_chedraui(browser, ean)
-    prices[:superama]     = PriceScraperModule.scrape_superama(browser, ean)
-    prices[:walmart]      = PriceScraperModule.scrape_walmart(browser, ean)
-    prices[:sanborns]     = PriceScraperModule.scrape_sanborns(browser, ean)
+    # prices[:ahorro]       = PriceScraperModule.scrape_ahorro(browser, ean)
+    # prices[:by_price]     = PriceScraperModule.scrape_by_price(browser, ean)
+    # prices[:city_market]  = PriceScraperModule.scrape_city_market(browser, ean)
+    # prices[:farmalisto]   = PriceScraperModule.scrape_farmalisto(browser, ean)
+    # prices[:fresko]       = PriceScraperModule.scrape_fresko(browser, ean)
+    # prices[:guadalajara]  = PriceScraperModule.scrape_guadalajara(browser, ean)
+    # prices[:la_comer]     = PriceScraperModule.scrape_la_comer(browser, ean)
+    # prices[:prixz]        = PriceScraperModule.scrape_prixz(browser, ean)
+    # prices[:san_pablo]    = PriceScraperModule.scrape_san_pablo(browser, ean)
+    # prices[:soriana]      = PriceScraperModule.scrape_soriana(browser, ean)
+    # prices[:chedraui]     = PriceScraperModule.scrape_chedraui(browser, ean)
+    # prices[:superama]     = PriceScraperModule.scrape_superama(browser, ean)
+    # prices[:walmart]      = PriceScraperModule.scrape_walmart(browser, ean)
+    # prices[:sanborns]     = PriceScraperModule.scrape_sanborns(browser, ean)
 
     puts Time.now.to_s + ' Ending Scrape for EAN: ' + ean 
     puts'------------------'
     
     browser.close
 
+    byebug
     prices
   end
 
@@ -143,7 +145,14 @@ module PriceScraperModule
   def self.scrape_superama(browser, ean)
     puts Time.now.to_s + ' Scrapeando Superama'
     browser.goto 'https://www.superama.com.mx/buscar/' + PriceScraperModule.convert_ean_to_upc_13(ean)
-    PriceScraperModule.assign_price(browser.p(class: 'upcPrice'), browser.span(class: 'numeroResultadosTotal'))
+
+    if browser.p(class: 'upcPrice').exists?
+      browser.p(class: 'upcPrice').text[(browser.p(class: 'upcPrice').span.text.length+1)..-1].gsub(/[^\d]/, '').to_f / 100
+    elsif browser.span(class: 'numeroResultadosTotal').exists?
+      'Not In Store'
+    else
+      'Other Error'
+    end
   end
 
   def self.scrape_walmart(browser, ean)
