@@ -199,6 +199,22 @@ module PriceScraperModule
   end
 
   def self.city_market_fresko_la_comer(browser)
+    
+    browser.h1(class: 'titulo_busqueda').strong.wait_while { |a| a.text.length == 26 }
+    searching_result = true
+    while searching_result
+      searching_result = false if browser.div(class: "sinresultados").exists?
+      searching_result = false if 40 == browser.h1(class: 'titulo_busqueda').strong.text.length
+    end
+
+    puts 'aaaaa'
+    puts 'aaaaa'
+    puts browser.h1(class: 'titulo_busqueda').strong(class: 'ng-hide').exists?
+    puts browser.h1(class: 'titulo_busqueda').strong.text.length
+    puts browser.h1(class: 'titulo_busqueda').strong.text
+    puts 'aaaaa'
+    puts 'aaaaa'
+
     if browser.h1(class: 'titulo_busqueda').strong(class: 'ng-hide').exists?
       browser.div(class: "sinresultados").wait_until(&:exists?)
     else
