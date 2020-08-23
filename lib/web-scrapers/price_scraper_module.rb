@@ -1,15 +1,13 @@
 module PriceScraperModule
   
-  # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("1234567890")
+  # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("1234567890123")      # Fake EAN
+  # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("7501109901890")      # Pariet
+  # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("7501008494226")      # Aspirina Junior
+  # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("7501299300367")      # Sensibit
+  # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("7501573902782")      # RANITIDINA
   
   def self.scrape_ean(ean)
     prices  = {}
-
-    # ean     = "1234567890123" # Fake EAN
-    # ean     = "7501109901890" # Pariet
-    # ean     = "7501008494226" # Aspirina Junior
-    # ean     = "7501299300367" # Sensibit
-    # ean     = "7501573902782" # RANITIDINA
 
     puts'------------------'
     puts Time.now.to_s + ' Starting Scrape for EAN: ' + ean
@@ -41,7 +39,7 @@ module PriceScraperModule
     prices[:fresko]       = PriceScraperModule.scrape_fresko(browser, ean)
     prices[:guadalajara]  = PriceScraperModule.scrape_guadalajara(browser, ean)
     prices[:la_comer]     = PriceScraperModule.scrape_la_comer(browser, ean)
-    # prices[:prixz]        = PriceScraperModule.scrape_prixz(browser, ean)
+    prices[:prixz]        = PriceScraperModule.scrape_prixz(browser, ean)
     prices[:san_pablo]    = PriceScraperModule.scrape_san_pablo(browser, ean)
     prices[:soriana]      = PriceScraperModule.scrape_soriana(browser, ean)
     prices[:chedraui]     = PriceScraperModule.scrape_chedraui(browser, ean)
@@ -151,9 +149,10 @@ module PriceScraperModule
     puts Time.now.to_s + ' Scrapeando Superama'
     browser.goto 'https://www.superama.com.mx/buscar/' + PriceScraperModule.convert_ean_to_upc_13(ean)
 
-    if browser.p(class: 'upcPrice').exists?
+    search_results = browser.span(class: "numeroResultadosActuales").wait_until(&:exists?).text.gsub(/[^\d]/, '').to_i
+    if 1 == search_results
       browser.p(class: 'upcPrice').text[(browser.p(class: 'upcPrice').span.text.length+1)..-1].gsub(/[^\d]/, '').to_f / 100
-    elsif browser.span(class: 'numeroResultadosTotal').exists?
+    elsif 0 == search_results
       'Not In Store'
     else
       'Other Error'
