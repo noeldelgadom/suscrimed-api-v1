@@ -3,6 +3,7 @@ module PriceScraperModule
   # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("1234567890123")      # Fake EAN
   # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("7501109901890")      # Pariet
   # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("7501008494226")      # Aspirina Junior
+  # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("7501008433515")      # Cafiaspirina
   # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("7501299300367")      # Sensibit
   # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("7501573902782")      # RANITIDINA
   
@@ -76,7 +77,7 @@ module PriceScraperModule
   def self.scrape_city_market(browser, ean)
     puts Time.now.to_s + ' Scrapeando City Market'
     browser.goto 'https://www.lacomer.com.mx/lacomer/goBusqueda.action?succId=380&ver=mislistas&succFmt=200&criterio=' + ean + '#/' + ean
-    PriceScraperModule.assign_price(browser.span(class: 'precio_normal'), browser.div(class: "sinresultados"))
+    PriceScraperModule.city_market_fresko_la_comer(browser)
   end
 
   def self.scrape_farmalisto(browser,ean)
@@ -89,7 +90,7 @@ module PriceScraperModule
   def self.scrape_fresko(browser, ean)
     puts Time.now.to_s + ' Scrapeando Fresko'
     browser.goto 'https://www.lacomer.com.mx/lacomer/goBusqueda.action?succId=137&ver=mislistas&succFmt=100&criterio=' + ean + '#/' + ean
-    PriceScraperModule.assign_price(browser.span(class: 'precio_normal'), browser.div(class: "sinresultados"))
+    PriceScraperModule.city_market_fresko_la_comer(browser)
   end
 
   def self.scrape_guadalajara(browser, ean)
@@ -101,7 +102,7 @@ module PriceScraperModule
   def self.scrape_la_comer(browser, ean)
     puts Time.now.to_s + ' Scrapeando La Comer'
     browser.goto 'https://www.lacomer.com.mx/lacomer/goBusqueda.action?succId=287&ver=mislistas&succFmt=100&criterio=' + ean + '#/' + ean
-    PriceScraperModule.assign_price(browser.span(class: 'precio_normal'), browser.div(class: "sinresultados"))
+    PriceScraperModule.city_market_fresko_la_comer(browser)
   end
 
   def self.scrape_prixz(browser, ean)
@@ -195,5 +196,14 @@ module PriceScraperModule
 
   def self.convert_ean_to_upc_14(ean)
     '00' + PriceScraperModule.convert_ean_to_upc_12(ean)
+  end
+
+  def self.city_market_fresko_la_comer(browser)
+    if browser.h1(class: 'titulo_busqueda').strong(class: 'ng-hide').exists?
+      browser.div(class: "sinresultados").wait_until(&:exists?)
+    else
+      browser.span(class: 'precio_normal').wait_until(&:exists?)
+    end
+    PriceScraperModule.assign_price(browser.span(class: 'precio_normal'), browser.div(class: "sinresultados"))
   end
 end
