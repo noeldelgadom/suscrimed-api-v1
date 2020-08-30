@@ -41,11 +41,11 @@ module PriceScraperModule
     # prices[:fresko]       = PriceScraperModule.scrape_fresko(browser, ean)
     # prices[:guadalajara]  = PriceScraperModule.scrape_guadalajara(browser, ean)
     # prices[:la_comer]     = PriceScraperModule.scrape_la_comer(browser, ean)
-    prices[:prixz]        = PriceScraperModule.scrape_prixz(browser, ean)
+    # prices[:prixz]        = PriceScraperModule.scrape_prixz(browser, ean)
     # prices[:san_pablo]    = PriceScraperModule.scrape_san_pablo(browser, ean)
     # prices[:soriana]      = PriceScraperModule.scrape_soriana(browser, ean)
     # prices[:chedraui]     = PriceScraperModule.scrape_chedraui(browser, ean)
-    # prices[:superama]     = PriceScraperModule.scrape_superama(browser, ean)
+    prices[:superama]     = PriceScraperModule.scrape_superama(browser, ean)
     # prices[:walmart]      = PriceScraperModule.scrape_walmart(browser, ean)
     # prices[:sanborns]     = PriceScraperModule.scrape_sanborns(browser, ean)
 
