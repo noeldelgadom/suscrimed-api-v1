@@ -14,7 +14,7 @@ module PriceScraperModule
     puts'------------------'
     puts Time.now.to_s + ' Starting Scrape for EAN: ' + ean
 
-    browser = Watir::Browser.new :chrome
+    # browser = Watir::Browser.new :chrome
     # browser = Watir::Browser.new :chrome, headless: true
 
     prices = {
@@ -45,14 +45,31 @@ module PriceScraperModule
     # prices[:san_pablo]    = PriceScraperModule.scrape_san_pablo(browser, ean)
     # prices[:soriana]      = PriceScraperModule.scrape_soriana(browser, ean)
     # prices[:chedraui]     = PriceScraperModule.scrape_chedraui(browser, ean)
-    prices[:superama]     = PriceScraperModule.scrape_superama(browser, ean)
+    # prices[:superama]     = PriceScraperModule.scrape_superama(browser, ean)
     # prices[:walmart]      = PriceScraperModule.scrape_walmart(browser, ean)
     # prices[:sanborns]     = PriceScraperModule.scrape_sanborns(browser, ean)
 
     puts Time.now.to_s + ' Ending Scrape for EAN: ' + ean 
     puts'------------------'
     
-    browser.close
+    # browser.close
+
+    prices = {
+      ahorro:       111.1,
+      by_price:     111.1,
+      city_market:  'Not in Store',
+      farmalisto:   'Not in Store',
+      fresko:       111.1,
+      guadalajara:  111.1,
+      la_comer:     111.1,
+      prixz:        'Not Updated',
+      san_pablo:    111.1,
+      soriana:      111.1,
+      chedraui:     111.1,
+      superama:     111.1,
+      walmart:      111.1,
+      sanborns:     111.1,
+    }
 
     prices
   end
