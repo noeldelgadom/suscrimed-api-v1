@@ -190,6 +190,12 @@ module PriceScraperModule
   def self.scrape_sanborns(browser, ean)
     puts Time.now.to_s + ' Scrapeando Sanbornns'
     browser.goto 'https://www.sanborns.com.mx/resultados/q=' + ean + '/1'
+
+    loading = true
+    while loading
+      loading = false if browser.span(class: 'preciodesc').exists? || browser.div(class: 'resultado').exists?
+    end
+
     price = PriceScraperModule.assign_price(browser.span(class: 'preciodesc'), browser.div(class: 'resultado'))
     price.class.name == 'Float' ? (price * 100).round(2) : price
   end
