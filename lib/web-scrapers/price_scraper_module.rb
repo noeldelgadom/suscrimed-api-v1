@@ -121,6 +121,11 @@ module PriceScraperModule
     else
       browser.div(class: 'ais-hits--content').h2.a.click
 
+      loading = true
+      while loading
+        loading = false if browser.section(class: 'not-found-page').exists? || browser.div(id: 'tab-description').exists?
+      end
+
       if browser.section(class: 'not-found-page').exists?
         PriceScraperModule.assign_price(browser.p(class: 'some-weird-class-that-should-not-exist'), browser.section(class: 'not-found-page')) 
       elsif ean != browser.div(id: 'tab-description').text[browser.div(id: 'tab-description').text.index('EAN:') + 5, 13]
@@ -172,7 +177,13 @@ module PriceScraperModule
     puts Time.now.to_s + ' Scrapeando WalMart'
     browser.goto 'https://super.walmart.com.mx/productos?Ntt=' + PriceScraperModule.convert_ean_to_upc_14(ean)
     browser.div(id: 'scrollToTopComponent').wait_until(&:exists?)
-    browser.p(class: 'price-and-promotions_currentPrice__XT_Iz').wait_while { |a| a.text == '$--' } unless browser.div(class: 'no-results_container__75YGT').exists?
+    
+    loading = true
+    while loading
+      loading = false if browser.p(class: 'price-and-promotions_currentPrice__XT_Iz').exists? || browser.div(class: 'no-results_container__75YGT').exists?
+    end
+
+    browser.p(class: 'price-and-promotions_currentPrice__XT_Iz') { |a| a.text == '$--' } unless browser.div(class: 'no-results_container__75YGT').exists?
     PriceScraperModule.assign_price(browser.p(class: 'price-and-promotions_currentPrice__XT_Iz'), browser.div(class: 'no-results_container__75YGT'))
   end
 
