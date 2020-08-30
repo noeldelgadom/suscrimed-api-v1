@@ -10,6 +10,7 @@ module GoogleDriveModule
     session                 = GoogleDrive::Session.from_service_account_key("config/api-keys/google-sheets-key.json")
     spreadsheet             = session.spreadsheet_by_title("Competitor Prices")
     worksheet_today_prices  = spreadsheet.worksheets.first
+    worksheet_last_prices   = spreadsheet.worksheets.second
 
     puts'--------------------------------------------------------------------------------'
     puts'--------------------------------------------------------------------------------'
@@ -22,7 +23,8 @@ module GoogleDriveModule
       
       prices  = PriceScraperModule.scrape_ean(ean)
 
-      GoogleDriveModule.update_today(row, prices, worksheet_today_prices)
+      GoogleDriveModule.update_today_prices(row, prices, worksheet_today_prices)
+      GoogleDriveModule.update_last_prices( row, prices, worksheet_last_prices )
 
       row += 1
     end
@@ -32,7 +34,26 @@ module GoogleDriveModule
     puts'--------------------------------------------------------------------------------'
   end
 
-  def self.update_today(row, prices, worksheet)
+  def self.update_today_prices(row, prices, worksheet)
+    worksheet[row, 3]   = prices[:ahorro]
+    worksheet[row, 4]   = prices[:by_price]
+    worksheet[row, 5]   = prices[:city_market]
+    worksheet[row, 6]   = prices[:farmalisto]
+    worksheet[row, 7]   = prices[:fresko]
+    worksheet[row, 8]   = prices[:guadalajara]
+    worksheet[row, 9]   = prices[:la_comer]
+    worksheet[row, 10]  = prices[:prixz]
+    worksheet[row, 11]  = prices[:san_pablo]
+    worksheet[row, 12]  = prices[:soriana]
+    worksheet[row, 13]  = prices[:chedraui]
+    worksheet[row, 14]  = prices[:superama]
+    worksheet[row, 15]  = prices[:walmart]
+    worksheet[row, 16]  = prices[:sanborns]  
+    
+    worksheet.save
+  end
+
+  def self.update_last_prices(row, prices, worksheet)
     worksheet[row, 3]   = prices[:ahorro]
     worksheet[row, 4]   = prices[:by_price]
     worksheet[row, 5]   = prices[:city_market]
