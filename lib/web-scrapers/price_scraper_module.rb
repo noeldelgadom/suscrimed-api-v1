@@ -6,6 +6,7 @@ module PriceScraperModule
   # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("7501008433515")      # Cafiaspirina
   # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("7501299300367")      # Sensibit
   # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("7501573902782")      # RANITIDINA
+  # reload! ; load "lib/web-scrapers/price_scraper_module.rb" ; include PriceScraperModule ; PriceScraperModule.scrape_ean("7501092721918")      # Ogastro
   
   def self.scrape_ean(ean)
     prices  = {}
@@ -33,20 +34,20 @@ module PriceScraperModule
       sanborns:     'Not Updated',
     }
 
-    prices[:ahorro]       = PriceScraperModule.scrape_ahorro(browser, ean)
-    prices[:by_price]     = PriceScraperModule.scrape_by_price(browser, ean)
-    prices[:city_market]  = PriceScraperModule.scrape_city_market(browser, ean)
-    prices[:farmalisto]   = PriceScraperModule.scrape_farmalisto(browser, ean)
-    prices[:fresko]       = PriceScraperModule.scrape_fresko(browser, ean)
-    prices[:guadalajara]  = PriceScraperModule.scrape_guadalajara(browser, ean)
-    prices[:la_comer]     = PriceScraperModule.scrape_la_comer(browser, ean)
+    # prices[:ahorro]       = PriceScraperModule.scrape_ahorro(browser, ean)
+    # prices[:by_price]     = PriceScraperModule.scrape_by_price(browser, ean)
+    # prices[:city_market]  = PriceScraperModule.scrape_city_market(browser, ean)
+    # prices[:farmalisto]   = PriceScraperModule.scrape_farmalisto(browser, ean)
+    # prices[:fresko]       = PriceScraperModule.scrape_fresko(browser, ean)
+    # prices[:guadalajara]  = PriceScraperModule.scrape_guadalajara(browser, ean)
+    # prices[:la_comer]     = PriceScraperModule.scrape_la_comer(browser, ean)
     prices[:prixz]        = PriceScraperModule.scrape_prixz(browser, ean)
-    prices[:san_pablo]    = PriceScraperModule.scrape_san_pablo(browser, ean)
-    prices[:soriana]      = PriceScraperModule.scrape_soriana(browser, ean)
-    prices[:chedraui]     = PriceScraperModule.scrape_chedraui(browser, ean)
-    prices[:superama]     = PriceScraperModule.scrape_superama(browser, ean)
-    prices[:walmart]      = PriceScraperModule.scrape_walmart(browser, ean)
-    prices[:sanborns]     = PriceScraperModule.scrape_sanborns(browser, ean)
+    # prices[:san_pablo]    = PriceScraperModule.scrape_san_pablo(browser, ean)
+    # prices[:soriana]      = PriceScraperModule.scrape_soriana(browser, ean)
+    # prices[:chedraui]     = PriceScraperModule.scrape_chedraui(browser, ean)
+    # prices[:superama]     = PriceScraperModule.scrape_superama(browser, ean)
+    # prices[:walmart]      = PriceScraperModule.scrape_walmart(browser, ean)
+    # prices[:sanborns]     = PriceScraperModule.scrape_sanborns(browser, ean)
 
     puts Time.now.to_s + ' Ending Scrape for EAN: ' + ean 
     puts'------------------'
@@ -110,6 +111,11 @@ module PriceScraperModule
     browser.goto 'https://www.prixz.com/?s=' + ean + '&post_type=product'
     browser.div(id: 'algolia-hits').wait_until(&:exists?)
 
+    loading = true
+    while loading
+      loading = false if browser.div(class: "ais-hits__empty").exists? || browser.div(class: 'ais-hits--content').exists?
+    end
+
     if browser.div(class: "ais-hits__empty").exists?
       PriceScraperModule.assign_price(browser.div(class: 'some-weird-class-that-should-not-exist'), browser.div(class: "ais-hits__empty"))
     else
@@ -117,6 +123,8 @@ module PriceScraperModule
 
       if browser.section(class: 'not-found-page').exists?
         PriceScraperModule.assign_price(browser.p(class: 'some-weird-class-that-should-not-exist'), browser.section(class: 'not-found-page')) 
+      elsif ean != browser.div(id: 'tab-description').text[browser.div(id: 'tab-description').text.index('EAN:') + 5, 13]
+        PriceScraperModule.assign_price(browser.p(class: 'some-weird-class-that-should-not-exist'), browser.body) 
       else
         browser.p(class: 'price').ins.wait_until(&:exists?)
         PriceScraperModule.assign_price(browser.p(class: 'price').ins, browser.div(class: "ais-hits__empty"))
@@ -203,8 +211,7 @@ module PriceScraperModule
     browser.h1(class: 'titulo_busqueda').strong.wait_while { |a| a.text.length == 26 }
     searching_result = true
     while searching_result
-      searching_result = false if browser.div(class: "sinresultados").exists?
-      searching_result = false if 40 == browser.h1(class: 'titulo_busqueda').strong.text.length
+      searching_result = false if browser.div(class: "sinresultados").exists? || 40 == browser.h1(class: 'titulo_busqueda').strong.text.length
     end
 
     if browser.h1(class: 'titulo_busqueda').strong(class: 'ng-hide').exists?
