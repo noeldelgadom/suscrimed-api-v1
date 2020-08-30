@@ -21,10 +21,11 @@ module GoogleDriveModule
       ean     = worksheet_today_prices[row, 1]
       puts Time.now.to_s + ' Updating EAN: ' + ean
       
-      prices  = PriceScraperModule.scrape_ean(ean)
-
-      GoogleDriveModule.update_today_prices(row, prices, worksheet_today_prices)
-      GoogleDriveModule.update_last_prices( row, prices, worksheet_last_prices )
+      if '' == worksheet_today_prices[row, 3]
+        prices  = PriceScraperModule.scrape_ean(ean)
+        GoogleDriveModule.update_today_prices(row, prices, worksheet_today_prices)
+        GoogleDriveModule.update_last_prices( row, prices, worksheet_last_prices )
+      end
 
       row += 1
     end
@@ -54,20 +55,20 @@ module GoogleDriveModule
   end
 
   def self.update_last_prices(row, prices, worksheet)
-    worksheet[row, 3]   = prices[:ahorro]
-    worksheet[row, 4]   = prices[:by_price]
-    worksheet[row, 5]   = prices[:city_market]
-    worksheet[row, 6]   = prices[:farmalisto]
-    worksheet[row, 7]   = prices[:fresko]
-    worksheet[row, 8]   = prices[:guadalajara]
-    worksheet[row, 9]   = prices[:la_comer]
-    worksheet[row, 10]  = prices[:prixz]
-    worksheet[row, 11]  = prices[:san_pablo]
-    worksheet[row, 12]  = prices[:soriana]
-    worksheet[row, 13]  = prices[:chedraui]
-    worksheet[row, 14]  = prices[:superama]
-    worksheet[row, 15]  = prices[:walmart]
-    worksheet[row, 16]  = prices[:sanborns]  
+    worksheet[row, 3]   = prices[:ahorro]       if 'Float' == prices[:ahorro].class.name
+    worksheet[row, 4]   = prices[:by_price]     if 'Float' == prices[:by_price].class.name
+    worksheet[row, 5]   = prices[:city_market]  if 'Float' == prices[:city_market].class.name
+    worksheet[row, 6]   = prices[:farmalisto]   if 'Float' == prices[:farmalisto].class.name
+    worksheet[row, 7]   = prices[:fresko]       if 'Float' == prices[:fresko].class.name
+    worksheet[row, 8]   = prices[:guadalajara]  if 'Float' == prices[:guadalajara].class.name
+    worksheet[row, 9]   = prices[:la_comer]     if 'Float' == prices[:la_comer].class.name
+    worksheet[row, 10]  = prices[:prixz]        if 'Float' == prices[:prixz].class.name
+    worksheet[row, 11]  = prices[:san_pablo]    if 'Float' == prices[:san_pablo].class.name
+    worksheet[row, 12]  = prices[:soriana]      if 'Float' == prices[:soriana].class.name
+    worksheet[row, 13]  = prices[:chedraui]     if 'Float' == prices[:chedraui].class.name
+    worksheet[row, 14]  = prices[:superama]     if 'Float' == prices[:superama].class.name
+    worksheet[row, 15]  = prices[:walmart]      if 'Float' == prices[:walmart].class.name
+    worksheet[row, 16]  = prices[:sanborns]     if 'Float' == prices[:sanborns].class.name
     
     worksheet.save
   end
