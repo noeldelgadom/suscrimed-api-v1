@@ -3,6 +3,7 @@ module GoogleDriveModule
   Bundler.require
 
   require_relative '../web-scrapers/price_scraper_module.rb'
+  require_relative '../web-scrapers/image_scraper_module.rb'
 
   # reload! ; load "lib/google-drive/google-drive-module.rb" ; include GoogleDriveModule ; GoogleDriveModule.update_competitor_prices
 
@@ -77,15 +78,31 @@ module GoogleDriveModule
 
   def self.update_images
     session                 = GoogleDrive::Session.from_service_account_key("config/api-keys/google-sheets-key.json")
-    spreadsheet             = session.spreadsheet_by_title("Competitor Prices")
-    worksheet_images        = spreadsheet.worksheets.third
+    spreadsheet             = session.spreadsheet_by_title("Competitor Images")
+    worksheet_images        = spreadsheet.worksheets.first
 
     puts'--------------------------------------------------------------------------------'
     puts'--------------------------------------------------------------------------------'
     puts Time.now.to_s + ' Start Updating Prices'
 
-    
+    browser = Watir::Browser.new :chrome
+    # browser = Watir::Browser.new :chrome, headless: true
 
+    ean = '1234567890123'      # Fake EAN
+    ean = '7501109901890'      # Pariet
+    # ean = '7501008494226'      # Aspirina Junior
+    # ean = '7501008433515'      # Cafiaspirina
+    # ean = '7501299300367'      # Sensibit
+    # ean = '7501573902782'      # RANITIDINA
+    # ean = '7501092721918'      # Ogastro
+
+    row   = 2
+    data  = ImageScraperModule.scrape_ean(browser, ean)
+    worksheet_images[row,3] = data[:image_url]
+    worksheet_images[row,4] = data[:source]
+
+    worksheet_images.save
+    browser.close
 
     puts Time.now.to_s + ' Finish Updating Prices'
     puts'--------------------------------------------------------------------------------'
