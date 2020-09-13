@@ -14,8 +14,8 @@ module PriceScraperModule
     puts'------------------'
     puts Time.now.to_s + ' Starting Scrape for EAN: ' + ean
 
-    browser = Watir::Browser.new :chrome
-    # browser = Watir::Browser.new :chrome, headless: true
+    # browser = Watir::Browser.new :chrome
+    browser = Watir::Browser.new :chrome, headless: true
 
     prices = {
       ahorro:       'Not Updated',
@@ -35,13 +35,13 @@ module PriceScraperModule
     }
 
     prices[:ahorro]       = PriceScraperModule.scrape_ahorro(browser, ean)
-    prices[:by_price]     = PriceScraperModule.scrape_by_price(browser, ean)
+    # prices[:by_price]     = PriceScraperModule.scrape_by_price(browser, ean)
     prices[:city_market]  = PriceScraperModule.scrape_city_market(browser, ean)
     prices[:farmalisto]   = PriceScraperModule.scrape_farmalisto(browser, ean)
     prices[:fresko]       = PriceScraperModule.scrape_fresko(browser, ean)
     prices[:guadalajara]  = PriceScraperModule.scrape_guadalajara(browser, ean)
     prices[:la_comer]     = PriceScraperModule.scrape_la_comer(browser, ean)
-    prices[:prixz]        = PriceScraperModule.scrape_prixz(browser, ean)
+    # prices[:prixz]        = PriceScraperModule.scrape_prixz(browser, ean)
     prices[:san_pablo]    = PriceScraperModule.scrape_san_pablo(browser, ean)
     prices[:soriana]      = PriceScraperModule.scrape_soriana(browser, ean)
     prices[:chedraui]     = PriceScraperModule.scrape_chedraui(browser, ean)
