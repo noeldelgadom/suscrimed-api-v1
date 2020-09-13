@@ -72,4 +72,23 @@ module GoogleDriveModule
     
     worksheet.save
   end
+
+  # reload! ; load "lib/google-drive/google-drive-module.rb" ; include GoogleDriveModule ; GoogleDriveModule.update_images
+
+  def self.update_images
+    session                 = GoogleDrive::Session.from_service_account_key("config/api-keys/google-sheets-key.json")
+    spreadsheet             = session.spreadsheet_by_title("Competitor Prices")
+    worksheet_images        = spreadsheet.worksheets.third
+
+    puts'--------------------------------------------------------------------------------'
+    puts'--------------------------------------------------------------------------------'
+    puts Time.now.to_s + ' Start Updating Prices'
+
+    
+
+
+    puts Time.now.to_s + ' Finish Updating Prices'
+    puts'--------------------------------------------------------------------------------'
+    puts'--------------------------------------------------------------------------------'
+  end
 end
