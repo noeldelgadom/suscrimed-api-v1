@@ -98,9 +98,7 @@ module GoogleDriveModule
     # ean = '7501092721918'      # Ogastro
 
     row   = 2
-    data  = ImageScraperModule.scrape_ean(browser, ean)
-    worksheet_images[row,3] = data[:image_url]
-    worksheet_images[row,4] = data[:source]
+    worksheet_images[row,3] = ImageScraperModule.scrape_ean(browser, ean)
 
     worksheet_images.save
     browser.close

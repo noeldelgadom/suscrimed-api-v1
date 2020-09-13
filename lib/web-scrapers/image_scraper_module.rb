@@ -6,27 +6,14 @@ module ImageScraperModule
     puts'------------------'
     puts Time.now.to_s + ' Starting Scrape for EAN: ' + ean
 
-    data = {
-      image_url:  '',
-      source:     ''
-    }
-
-    data[:image_url] = ImageScraperModule.scrape_ahorro(browser, ean)
-    if data[:image_url] != ''
-      data[:source]    = 'Ahorro'
-    else
-      data[:image_url] = ImageScraperModule.scrape_farmalisto(browser, ean)
-      if data[:image_url] != ''
-        data [:source] = 'Farmalisto'
-      else
-        data[:image_url] = 'Not Found'
-      end
-    end
+    image_url = ImageScraperModule.scrape_ahorro(browser, ean)
+    image_url = ImageScraperModule.scrape_farmalisto(browser, ean)  if image_url == ''
+    image_url = 'Not Found'                                         if image_url == ''
     
     puts Time.now.to_s + ' Ending Scrape for EAN: ' + ean 
     puts'------------------'
 
-    data
+    image_url
   end
 
   def self.scrape_ahorro(browser, ean)
