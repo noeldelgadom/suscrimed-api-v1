@@ -12,7 +12,16 @@ module ImageScraperModule
     }
 
     data[:image_url] = ImageScraperModule.scrape_ahorro(browser, ean)
-    data[:source]    = 'Ahorro' if data[:image_url] != ''
+    if data[:image_url] != ''
+      data[:source]    = 'Ahorro'
+    else
+      data[:image_url] = ImageScraperModule.scrape_farmalisto(browser, ean)
+      if data[:image_url] != ''
+        data [:source] = 'Farmalisto'
+      else
+        data[:image_url] = 'Not Found'
+      end
+    end
     
     puts Time.now.to_s + ' Ending Scrape for EAN: ' + ean 
     puts'------------------'
@@ -24,5 +33,12 @@ module ImageScraperModule
     puts Time.now.to_s + ' Scrapeando Ahorro'
     browser.goto 'https://www.fahorro.com/catalogsearch/result/?q=' + ean
     browser.img(class: 'product-image-photo').exists? ? browser.img(class: 'product-image-photo').src : ''
+  end
+
+  def self.scrape_farmalisto(browser,ean)
+    puts Time.now.to_s + ' Scrapeando Farmalisto'
+    browser.goto 'https://www.farmalisto.com.mx/#/dffullscreen/query=' + ean + '&query_name=match_and'
+    browser.div(class: 'df-header-title').wait_until(&:exists?)
+    browser.a(class: 'df-card__main').exists? ? browser.a(class: 'df-card__main').img.src : ''
   end
 end

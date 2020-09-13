@@ -83,13 +83,14 @@ module GoogleDriveModule
 
     puts'--------------------------------------------------------------------------------'
     puts'--------------------------------------------------------------------------------'
-    puts Time.now.to_s + ' Start Updating Prices'
+    puts Time.now.to_s + ' Start Updating Images'
 
     browser = Watir::Browser.new :chrome
     # browser = Watir::Browser.new :chrome, headless: true
 
     ean = '1234567890123'      # Fake EAN
-    ean = '7501109901890'      # Pariet
+    ean = '7501033920684'      # Lucrin
+    # ean = '7501109901890'      # Pariet
     # ean = '7501008494226'      # Aspirina Junior
     # ean = '7501008433515'      # Cafiaspirina
     # ean = '7501299300367'      # Sensibit
@@ -104,7 +105,7 @@ module GoogleDriveModule
     worksheet_images.save
     browser.close
 
-    puts Time.now.to_s + ' Finish Updating Prices'
+    puts Time.now.to_s + ' Finish Updating Images'
     puts'--------------------------------------------------------------------------------'
     puts'--------------------------------------------------------------------------------'
   end
