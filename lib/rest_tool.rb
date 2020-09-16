@@ -4,8 +4,7 @@ module RestTool
 
   # reload! ; load "lib/rest_tool.rb" ; include RestTool ; RestTool.retrieve_data
 
-  def self.retrieve_data
-    url        = 'https://jsonplaceholder.typicode.com/posts'
+  def self.retrieve_data(url)
     response  = RestClient.get URI::encode(url)
     JSON.parse(response.body)
   end
