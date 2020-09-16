@@ -12,6 +12,7 @@ gem 'puma', '~> 4.1'
 gem 'google_drive'
 gem 'watir'
 gem 'webdrivers'
+gem 'rest-client'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.7'
