@@ -70,13 +70,10 @@ module PriceScraperModule
     if browser.div(class: 'byprice-filters-title').p.wait_until(&:exists?).text.gsub(/[^\d]/, '').to_i > 0
       browser.text_field(id: 'ByPriceMainSearch').set browser.div(class: 'server-byprice-item-card-text').text
       browser.send_keys :enter
-      browser.div(class: 'server-byprice-item-card-add-to-cart').button.click
-      success_element = browser.div(class: 'byprice-item-store-prices-card-prices').span(class: 'ByPrice-price-amount').wait_until(&:exists?)
-
-
-      # browser.div(class: 'server-byprice-item-card-add-to-cart').button.wait_until(&:exists?).click # until browser.url[20,8] != 'busqueda'
-      # success_element = browser.div(class: 'ItemView-full-coverage-message').exists? ? browser.a(class: 'byprice-cards-list-item') : browser.div(class: 'byprice-cards-list-item')
-      # success_element = success_element.span(class: 'ByPrice-price-amount').wait_until(&:exists?)
+      browser.div(class: 'server-byprice-item-card-add-to-cart').button.wait_until(&:exists?).click while browser.url[20,8] == 'busqueda'
+      if ean == browser.element(id: 'ItemMetaViewDetails').data_item[browser.element(id: 'ItemMetaViewDetails').data_item.index('gtin') + 7,13]
+        success_element = browser.div(class: 'byprice-item-store-prices-card-prices').span(class: 'ByPrice-price-amount').wait_until(&:exists?)
+      end
     end
     PriceScraperModule.assign_price(success_element, browser.div(class: 'byprice-filters-title'))
   end
