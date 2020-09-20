@@ -5,9 +5,12 @@ module WebflowTool
   # reload! ; load "lib/webflow/webflow_module.rb" ; include WebflowTool ; WebflowTool.get_info
 
   def self.get_info
-    url           = 'https://api.webflow.com/info'
+    url       = 'https://api.webflow.com/info'
+    WebflowTool.get(url)
+  end
 
-    response        = RestClient.get url, WebflowTool.headers
+  def self.get(url)
+    response  = RestClient.get url, WebflowTool.headers
     JSON.parse(response.body)
   end
 
