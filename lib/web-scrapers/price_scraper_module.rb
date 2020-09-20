@@ -14,8 +14,8 @@ module PriceScraperModule
     puts'------------------'
     puts Time.now.to_s + ' Starting Scrape for EAN: ' + ean
 
-    browser = Watir::Browser.new :chrome
-    # browser = Watir::Browser.new :chrome, headless: true
+    # browser = Watir::Browser.new :chrome
+    browser = Watir::Browser.new :chrome, headless: true
 
     prices = {
       ahorro:       'Not Updated',
