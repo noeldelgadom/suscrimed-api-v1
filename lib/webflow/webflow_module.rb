@@ -15,10 +15,9 @@ module WebflowTool
   end
 
   def self.headers
-    webflow_auth  = JSON.parse(File.read('config/api-keys/webflow-auth.json'))
     {
-      'accept-version' => '1.0.0',
-      'Authorization' => 'Bearer ' + webflow_auth['api_token']
+      'accept-version'  => '1.0.0',
+      'Authorization'   => 'Bearer ' + JSON.parse(File.read('config/api-keys/webflow-auth.json'))['api_token']
     }
   end
 end
