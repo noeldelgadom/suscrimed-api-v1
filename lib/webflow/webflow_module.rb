@@ -5,7 +5,14 @@ module WebflowTool
   # reload! ; load "lib/webflow/webflow_module.rb" ; include WebflowTool ; WebflowTool.get_info
 
   def self.get_info
-    url       = 'https://api.webflow.com/info'
+    url = 'https://api.webflow.com/info'
+    WebflowTool.get(url)
+  end
+
+  # reload! ; load "lib/webflow/webflow_module.rb" ; include WebflowTool ; WebflowTool.get_products
+
+  def self.get_products
+    url = 'https://api.webflow.com/sites/' + JSON.parse(File.read('config/api-keys/webflow-auth.json'))['site'] + '/products'
     WebflowTool.get(url)
   end
 
