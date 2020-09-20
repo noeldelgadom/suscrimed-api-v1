@@ -1,12 +1,15 @@
 module WebflowTool
-  # require 'nokogiri'
+  require 'rest-client'
+  require 'json'
 
-  require_relative '../rest_tool.rb'
+  # reload! ; load "lib/webflow/webflow_module.rb" ; include WebflowTool ; WebflowTool.get_info
 
-  # reload! ; load "lib/webflow/webflow_module.rb" ; include WebflowTool ; WebflowTool.retrieve_cms
-
-  def self.retrieve_cms
-    url   = 'https://jsonplaceholder.typicode.com/posts'
-    data  = RestTool.retrieve_data(url)
+  def self.get_info
+    url       = 'https://api.webflow.com/info'
+    response  = RestClient.get url, {
+      'Authorization' => 'Bearer Actual-Token',
+      'accept-version' => '1.0.0'
+    }
+    JSON.parse(response.body)
   end
 end
