@@ -35,9 +35,9 @@ module PriceScraperModule
     }
 
     # prices[:ahorro]       = PriceScraperModule.scrape_ahorro(browser, ean)
-    # prices[:by_price]     = PriceScraperModule.scrape_by_price(browser, ean)
+    prices[:by_price]     = PriceScraperModule.scrape_by_price(browser, ean)
     # prices[:city_market]  = PriceScraperModule.scrape_city_market(browser, ean)
-    prices[:farmalisto]   = PriceScraperModule.scrape_farmalisto(browser, ean)
+    # prices[:farmalisto]   = PriceScraperModule.scrape_farmalisto(browser, ean)
     # prices[:fresko]       = PriceScraperModule.scrape_fresko(browser, ean)
     # prices[:guadalajara]  = PriceScraperModule.scrape_guadalajara(browser, ean)
     # prices[:la_comer]     = PriceScraperModule.scrape_la_comer(browser, ean)
@@ -68,9 +68,15 @@ module PriceScraperModule
     browser.goto 'https://byprice.com/busqueda?search-submit=&q=' + ean
     success_element = browser.div(class: 'some-weird-class-that-should-not-exist')
     if browser.div(class: 'byprice-filters-title').p.wait_until(&:exists?).text.gsub(/[^\d]/, '').to_i > 0
-      browser.button(class: 'byprice-button-2').wait_until(&:exists?).click until browser.url[20,8] != 'busqueda'
-      success_element = browser.div(class: 'ItemView-full-coverage-message').exists? ? browser.a(class: 'byprice-cards-list-item') : browser.div(class: 'byprice-cards-list-item')
-      success_element = success_element.span(class: 'ByPrice-price-amount').wait_until(&:exists?)
+      browser.text_field(id: 'ByPriceMainSearch').set browser.div(class: 'server-byprice-item-card-text').text
+      browser.send_keys :enter
+      browser.div(class: 'server-byprice-item-card-add-to-cart').button.click
+      success_element = browser.div(class: 'byprice-item-store-prices-card-prices').span(class: 'ByPrice-price-amount').wait_until(&:exists?)
+
+
+      # browser.div(class: 'server-byprice-item-card-add-to-cart').button.wait_until(&:exists?).click # until browser.url[20,8] != 'busqueda'
+      # success_element = browser.div(class: 'ItemView-full-coverage-message').exists? ? browser.a(class: 'byprice-cards-list-item') : browser.div(class: 'byprice-cards-list-item')
+      # success_element = success_element.span(class: 'ByPrice-price-amount').wait_until(&:exists?)
     end
     PriceScraperModule.assign_price(success_element, browser.div(class: 'byprice-filters-title'))
   end
