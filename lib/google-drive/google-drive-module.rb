@@ -17,7 +17,7 @@ module GoogleDriveModule
     puts'--------------------------------------------------------------------------------'
     puts Time.now.to_s + ' Start Updating Prices'
 
-    row = 8001
+    row = 9001
     while worksheet_today_prices[row, 1] != '' && Time.now.hour < 21
       ean     = worksheet_today_prices[row, 1]
       puts Time.now.to_s + ' Updating EAN: ' + ean
