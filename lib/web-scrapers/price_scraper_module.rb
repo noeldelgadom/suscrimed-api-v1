@@ -35,9 +35,9 @@ module PriceScraperModule
     }
 
     prices[:ahorro]       = PriceScraperModule.scrape_ahorro(browser, ean)
-    # prices[:by_price]     = PriceScraperModule.scrape_by_price(browser, ean)
+    # prices[:by_price]     = PriceSxcraperModule.scrape_by_price(browser, ean)
     prices[:city_market]  = PriceScraperModule.scrape_city_market(browser, ean)
-    prices[:farmalisto]   = PriceScraperModule.scrape_farmalisto(browser, ean)
+    # prices[:farmalisto]   = PriceScraperModule.scrape_farmalisto(browser, ean)
     prices[:fresko]       = PriceScraperModule.scrape_fresko(browser, ean)
     prices[:guadalajara]  = PriceScraperModule.scrape_guadalajara(browser, ean)
     prices[:la_comer]     = PriceScraperModule.scrape_la_comer(browser, ean)
