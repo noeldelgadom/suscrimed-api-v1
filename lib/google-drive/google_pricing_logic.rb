@@ -8,12 +8,15 @@ module GooglePricingLogic
     session                       = GoogleDrive::Session.from_service_account_key("config/api-keys/google-sheets-key.json")
     competitor_prices_spreadsheet = session.spreadsheet_by_title("Competitor Prices")
     competitor_prices             = competitor_prices_spreadsheet.worksheets.fifth
+    nadro_spreadsheet             = session.spreadsheet_by_title("NADRO - CATALAGO DE PRODUCTOS NADRO AL 200712")
+    nadro_costs                   = nadro_spreadsheet.worksheets.first
 
     puts'--------------------------------------------------------------------------------'
     puts'--------------------------------------------------------------------------------'
     puts Time.now.to_s + ' Start Updating Google Prices'
 
     puts competitor_prices[2,3]
+    puts nadro_costs[7,3]
 
     puts Time.now.to_s + ' Finish Updating Google Prices'
     puts'--------------------------------------------------------------------------------'
