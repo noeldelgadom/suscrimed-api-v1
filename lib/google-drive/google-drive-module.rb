@@ -17,7 +17,7 @@ module GoogleDriveModule
     puts'--------------------------------------------------------------------------------'
     puts Time.now.to_s + ' Start Updating Prices'
 
-    row = 9001
+    row = 11001
     while worksheet_today_prices[row, 1] != '' && Time.now.hour < 21
       ean     = worksheet_today_prices[row, 1]
       puts Time.now.to_s + ' Updating EAN: ' + ean
@@ -40,7 +40,7 @@ module GoogleDriveModule
     worksheet[row, 3]   = prices[:ahorro]
     worksheet[row, 4]   = prices[:by_price]
     worksheet[row, 5]   = prices[:city_market]
-    worksheet[row, 6]   = prices[:farmalisto]
+    # worksheet[row, 6]   = prices[:farmalisto]
     worksheet[row, 7]   = prices[:fresko]
     worksheet[row, 8]   = prices[:guadalajara]
     worksheet[row, 9]   = prices[:la_comer]
@@ -85,8 +85,8 @@ module GoogleDriveModule
     puts'--------------------------------------------------------------------------------'
     puts Time.now.to_s + ' Start Updating Images'
 
-    browser = Watir::Browser.new :chrome
-    # browser = Watir::Browser.new :chrome, headless: true
+    # browser = Watir::Browser.new :chrome
+    browser = Watir::Browser.new :chrome, headless: true
 
     row   = 2
     while worksheet_images[row, 1] != '' && Time.now.hour < 21
