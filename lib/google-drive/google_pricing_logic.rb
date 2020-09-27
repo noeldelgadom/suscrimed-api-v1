@@ -24,7 +24,7 @@ module GooglePricingLogic
 
     puts 'Cost | Max_limit | Limit_Margin | Price | Price_Margin | Farmalisto | Farmalisto_Margin'
     row       = 1
-    row_limit = 20
+    row_limit = 15
     while row < row_limit
 
       cost              = rand(1..100) / 1.0
@@ -32,12 +32,16 @@ module GooglePricingLogic
       max_limit         = rand(1..100) / 1.0
       limit_margin      = (100 * (max_limit - cost) / cost).round(2)
 
-      price             = rand(1..100) / 1.0
-      price_margin      = (100 * (price - cost) / cost).round(2)
-
       farmalisto_price  = [rand(1..100) / 1.0, 'Not In Store', '' ].sample
       farmalisto_margin = farmalisto_price.class.name == 'String' ? 'NA' : (100 * (farmalisto_price - cost) / cost).round(2)
-            
+      
+      if farmalisto_price.class.name == 'Float' && cost < farmalisto_price && farmalisto_price < max_limit
+        price = farmalisto_price
+      else
+        price = (max_limit + cost) / 2.0
+      end
+
+      price_margin      = (100 * (price - cost) / cost).round(2)
 
       print cost
       print '    |    '
