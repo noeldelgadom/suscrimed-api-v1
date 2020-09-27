@@ -41,7 +41,7 @@ module GooglePricingLogic
         if max_limit > cost
           price = (max_limit + cost) / 2.0
         else
-          price = 0
+          price = 0.01
         end
       end
 
