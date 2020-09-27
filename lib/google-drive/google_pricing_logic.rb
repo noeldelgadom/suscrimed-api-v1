@@ -10,6 +10,8 @@ module GooglePricingLogic
     # competitor_prices             = competitor_prices_spreadsheet.worksheets.fifth
     # nadro_spreadsheet             = session.spreadsheet_by_title("NADRO - CATALAGO DE PRODUCTOS NADRO AL 200712")
     # nadro_costs                   = nadro_spreadsheet.worksheets.first
+    webflow_spreadsheet           = session.spreadsheet_by_title("Webflow Product Import")
+    webflow_import                = webflow_spreadsheet.worksheets.first
 
     puts'--------------------------------------------------------------------------------'
     puts'--------------------------------------------------------------------------------'
@@ -17,6 +19,7 @@ module GooglePricingLogic
 
     # puts competitor_prices[2,3]
     # puts nadro_costs[7,3]
+    puts webflow_import[1,1]
 
     puts Time.now.to_s + ' Finish Updating Google Prices'
     puts'--------------------------------------------------------------------------------'
