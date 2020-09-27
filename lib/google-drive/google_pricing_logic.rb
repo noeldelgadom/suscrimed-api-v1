@@ -38,7 +38,11 @@ module GooglePricingLogic
       if farmalisto_price.class.name == 'Float' && cost < farmalisto_price && farmalisto_price < max_limit
         price = farmalisto_price
       else
-        price = (max_limit + cost) / 2.0
+        if max_limit > cost
+          price = (max_limit + cost) / 2.0
+        else
+          price = 0
+        end
       end
 
       price_margin      = (100 * (price - cost) / cost).round(2)
