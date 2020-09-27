@@ -22,27 +22,36 @@ module GooglePricingLogic
     # puts webflow_import[1,1]
 
 
-    puts 'Max Limit  |  Farmalisto  |  Price  |  Cost  |  Margin'
+    puts 'Cost | Max_limit | Limit_Margin | Price | Price_Margin | Farmalisto | Farmalisto_Margin'
     row       = 1
     row_limit = 20
     while row < row_limit
 
-      price_max_limit   = rand(1..100) / 1.0
-      farmalisto_price  = [rand(1..100) / 1.0, 'Not In Store', '' ].sample
       cost              = rand(1..100) / 1.0
-      
-      price             = 50.0
-      margin            = 100 * (price - cost) / cost
 
-      print price_max_limit
+      max_limit         = rand(1..100) / 1.0
+      limit_margin      = (100 * (max_limit - cost) / cost).round(2)
+
+      price             = rand(1..100) / 1.0
+      price_margin      = (100 * (price - cost) / cost).round(2)
+
+      farmalisto_price  = [rand(1..100) / 1.0, 'Not In Store', '' ].sample
+      farmalisto_margin = farmalisto_price.class.name == 'String' ? 'NA' : (100 * (farmalisto_price - cost) / cost).round(2)
+            
+
+      print cost
       print '    |    '
-      print farmalisto_price
+      print max_limit
+      print '    |    '
+      print limit_margin
       print '    |    '
       print price
       print '    |    '
-      print cost
+      print price_margin
       print '    |    '
-      print margin
+      print farmalisto_price
+      print '    |    '
+      print farmalisto_margin
       puts
       
       row += 1
