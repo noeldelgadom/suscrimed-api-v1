@@ -21,14 +21,32 @@ module GooglePricingLogic
     # puts nadro_costs[7,3]
     # puts webflow_import[1,1]
 
-    farmalisto_price  = 12.0
-    price_max_limit   = 15.0
-    cost              = 10.0
-    
-    price             = farmalisto_price
-    margin            = (price - cost) / cost
 
-    puts margin
+    puts 'Max Limit  |  Farmalisto  |  Price  |  Cost  |  Margin'
+    row       = 1
+    row_limit = 20
+    while row < row_limit
+
+      price_max_limit   = rand(1..100) / 1.0
+      farmalisto_price  = [rand(1..100) / 1.0, 'Not In Store', '' ].sample
+      cost              = rand(1..100) / 1.0
+      
+      price             = 50.0
+      margin            = 100 * (price - cost) / cost
+
+      print price_max_limit
+      print '    |    '
+      print farmalisto_price
+      print '    |    '
+      print price
+      print '    |    '
+      print cost
+      print '    |    '
+      print margin
+      puts
+      
+      row += 1
+    end
 
 
     puts Time.now.to_s + ' Finish Updating Google Prices'
