@@ -18,7 +18,7 @@ module ImageScraperModule
   def self.scrape_ahorro(browser, ean)
     puts Time.now.to_s + ' Scrapeando Ahorro'
     browser.goto 'https://www.fahorro.com/catalogsearch/result/?q=' + ean
-    browser.img(class: 'product-image-photo').exists? ? browser.img(class: 'product-image-photo').src : ''
+    browser.a(class: 'product-image').img.exists? ? browser.a(class: 'product-image').img.src : ''
   end
 
   def self.scrape_san_pablo(browser, ean)
