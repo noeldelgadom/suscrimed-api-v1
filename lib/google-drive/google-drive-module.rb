@@ -116,7 +116,7 @@ module GoogleDriveModule
     puts'--------------------------------------------------------------------------------'
     puts Time.now.to_s + ' Start Updating Search'
 
-    # browser = Watir::Browser.new :chrome
+    browser = Watir::Browser.new :chrome
     # browser = Watir::Browser.new :chrome, headless: true
 
     ean = "1234567890123"      # Fake EAN
@@ -129,7 +129,10 @@ module GoogleDriveModule
     ean = "7501168810713"      # Salofalk
     
     puts Time.now.to_s + ' Updating EAN: ' + ean
-    SearchScraperModule.scrape_ean
+    search_object = SearchScraperModule.scrape_ean(browser, ean)
+    puts search_object
+
+    browser.close
 
     puts Time.now.to_s + ' Finish Updating Search'
     puts'--------------------------------------------------------------------------------'
