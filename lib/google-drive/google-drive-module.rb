@@ -4,6 +4,7 @@ module GoogleDriveModule
 
   require_relative '../web-scrapers/price_scraper_module.rb'
   require_relative '../web-scrapers/image_scraper_module.rb'
+  require_relative '../web-scrapers/search_scraper_module.rb'
 
   # reload! ; load "lib/google-drive/google-drive-module.rb" ; include GoogleDriveModule ; GoogleDriveModule.update_competitor_prices
 
@@ -128,6 +129,7 @@ module GoogleDriveModule
     ean = "7501168810713"      # Salofalk
     
     puts Time.now.to_s + ' Updating EAN: ' + ean
+    SearchScraperModule.scrape_ean
 
     puts Time.now.to_s + ' Finish Updating Search'
     puts'--------------------------------------------------------------------------------'
