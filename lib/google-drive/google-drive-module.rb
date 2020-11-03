@@ -120,20 +120,22 @@ module GoogleDriveModule
     # browser = Watir::Browser.new :chrome, headless: true
 
     row     = 2
-    ean     = worksheet_search[row, 1]
-    puts Time.now.to_s + ' Updating EAN: ' + ean
-    search_object = SearchScraperModule.scrape_ean(browser, ean)
+    while worksheet_search[row, 1] != '' && Time.now.hour < 22
+      if '' == worksheet_search[row, 3]
+        ean     = worksheet_search[row, 1]
+        puts Time.now.to_s + ' Updating EAN: ' + ean
+        search_object = SearchScraperModule.scrape_ean(browser, ean)
 
-    if '' == worksheet_search[row, 3]
-      worksheet_search[row,3] = search_object[:image_url]          
-      worksheet_search[row,4] = search_object[:cofepris_code]      
-      worksheet_search[row,5] = search_object[:friendly_title]     
-      worksheet_search[row,6] = search_object[:active_ingredient]  
-      worksheet_search[row,7] = search_object[:medical_condition]  
+        worksheet_search[row,3] = search_object[:image_url]          
+        worksheet_search[row,4] = search_object[:cofepris_code]      
+        worksheet_search[row,5] = search_object[:friendly_title]     
+        worksheet_search[row,6] = search_object[:active_ingredient]  
+        worksheet_search[row,7] = search_object[:medical_condition]  
 
-      worksheet_search.save
+        worksheet_search.save
+      end
+      row += 1
     end
-    row += 1
 
     browser.close
 
