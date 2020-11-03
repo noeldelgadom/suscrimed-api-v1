@@ -110,7 +110,6 @@ module GoogleDriveModule
   def self.update_search
     session                 = GoogleDrive::Session.from_service_account_key("config/api-keys/google-sheets-key.json")
     spreadsheet             = session.spreadsheet_by_title("Competitor Images")
-    byebug
     worksheet_search        = spreadsheet.worksheets.second
 
     puts'--------------------------------------------------------------------------------'
