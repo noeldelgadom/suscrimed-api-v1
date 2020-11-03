@@ -108,9 +108,10 @@ module GoogleDriveModule
   # reload! ; load "lib/google-drive/google-drive-module.rb" ; include GoogleDriveModule ; GoogleDriveModule.update_search
 
   def self.update_search
-    # session                 = GoogleDrive::Session.from_service_account_key("config/api-keys/google-sheets-key.json")
-    # spreadsheet             = session.spreadsheet_by_title("Competitor Images")
-    # worksheet_images        = spreadsheet.worksheets.second
+    session                 = GoogleDrive::Session.from_service_account_key("config/api-keys/google-sheets-key.json")
+    spreadsheet             = session.spreadsheet_by_title("Competitor Images")
+    byebug
+    worksheet_search        = spreadsheet.worksheets.second
 
     puts'--------------------------------------------------------------------------------'
     puts'--------------------------------------------------------------------------------'
@@ -128,9 +129,22 @@ module GoogleDriveModule
     ean = "7501092721918"      # Ogastro
     ean = "7501168810713"      # Salofalk
     
+
+    row   = 2
+    ean     = worksheet_search[row, 1]
     puts Time.now.to_s + ' Updating EAN: ' + ean
     search_object = SearchScraperModule.scrape_ean(browser, ean)
-    puts search_object
+
+    if '' == worksheet_search[row, 3]
+      worksheet_search[row,3] = search_object[:image_url]          
+      worksheet_search[row,4] = search_object[:cofepris_code]      
+      worksheet_search[row,5] = search_object[:friendly_title]     
+      worksheet_search[row,6] = search_object[:active_ingredient]  
+      worksheet_search[row,7] = search_object[:medical_condition]  
+
+      worksheet_search.save
+    end
+    row += 1
 
     browser.close
 
