@@ -119,17 +119,7 @@ module GoogleDriveModule
     browser = Watir::Browser.new :chrome
     # browser = Watir::Browser.new :chrome, headless: true
 
-    ean = "1234567890123"      # Fake EAN
-    ean = "7501109901890"      # Pariet
-    ean = "7501008494226"      # Aspirina Junior
-    ean = "7501008433515"      # Cafiaspirina
-    ean = "7501299300367"      # Sensibit
-    ean = "7501573902782"      # RANITIDINA
-    ean = "7501092721918"      # Ogastro
-    ean = "7501168810713"      # Salofalk
-    
-
-    row   = 2
+    row     = 2
     ean     = worksheet_search[row, 1]
     puts Time.now.to_s + ' Updating EAN: ' + ean
     search_object = SearchScraperModule.scrape_ean(browser, ean)
