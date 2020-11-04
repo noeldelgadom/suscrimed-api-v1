@@ -25,12 +25,21 @@ module SearchScraperModule
     browser.div(class: 'df-header-title').wait_until(&:exists?)
     if browser.a(class: 'df-card__main').exists?
       browser.a(class: 'df-card__main').click
-      browser.div(class: 'product-information').wait_until(&:exists?)
       search_object[:image_url]           = browser.img(class: 'js-qv-product-cover').src   if browser.img(class: 'js-qv-product-cover').exists?
       search_object[:friendly_title]      = browser.h2(class: 'h1').text                    if browser.h2(class: 'h1').exists?
       search_object[:medical_condition]   = browser.ol.text.gsub("\n→ ", ">")               if browser.ol.exists?
-      search_object[:cofepris_code]       = browser.div(class: 'product-information').text[10 + browser.div(class: 'product-information').text.index("COFEPRIS"), 14]   if browser.div(class: 'product-information').text.include?("COFEPRIS")
-      search_object[:active_ingredient]   = browser.div(class: 'product-information').text[0..browser.div(class: 'product-information').text.index("\n")-1]
+      
+      if search_object[:active_ingredient]   = browser.div(class: 'product-information').exists?
+        search_object[:active_ingredient]   = browser.div(class: 'product-information').text[0..browser.div(class: 'product-information').text.index("\n")-1]
+      
+        if browser.div(class: 'product-information').text.include?("COFEPRIS")
+          start_pos =   browser.div(class: 'product-information').text.index("COFEPRIS")  + 10
+          end_pos   =   browser.div(class: 'product-information').text.index("SSA")       - 2
+          end_pos   +=  1 unless " " == browser.div(class: 'product-information').text[end_pos+1] 
+          search_object[:cofepris_code]     = browser.div(class: 'product-information').text[start_pos..end_pos]
+        end
+      end
+
     end
     
     search_object
