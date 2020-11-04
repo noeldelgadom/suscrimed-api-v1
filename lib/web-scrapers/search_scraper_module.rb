@@ -9,12 +9,14 @@ module SearchScraperModule
       friendly_title_fl:    'Not Updated',
       active_ingredient_fl: 'Not Updated',
       medical_condition:    'Not Updated',
+
       image_url_sp:         'Not Updated',
       friendly_title_sp:    'Not Updated',
       active_ingredient_sp: 'Not Updated',
     }
 
     search_object = SearchScraperModule.scrape_farmalisto(browser, ean, search_object)
+    search_object = SearchScraperModule.scrape_san_pablo( browser, ean, search_object)
     
     puts Time.now.to_s + ' Ending Scrape for EAN: ' + ean 
     puts'------------------'
@@ -42,9 +44,20 @@ module SearchScraperModule
           search_object[:cofepris_code]     = browser.div(class: 'product-information').text[start_pos..end_pos]
         end
       end
-
     end
     
+    search_object
+  end
+
+  def self.scrape_san_pablo( browser, ean, search_object)
+    puts Time.now.to_s + ' Scrapeando San Pablo'
+    browser.goto 'https://www.farmaciasanpablo.com.mx/search/?text=' + ean
+    if 0 < browser.spans(class: 'counter').last.text[-1].to_i
+      search_object[:image_url_sp]          = browser.img(class: 'item-image').src    if browser.img(class: 'item-image').exists?
+      search_object[:friendly_title_sp]     = browser.p(class: 'item-title').text     if browser.p(class: 'item-title').exists?
+      search_object[:active_ingredient_sp]  = browser.p(class: 'item-subtitle').text  if browser.p(class: 'item-subtitle').exists?
+    end
+
     search_object
   end
 end
