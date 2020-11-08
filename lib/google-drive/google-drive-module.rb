@@ -119,7 +119,7 @@ module GoogleDriveModule
     # browser = Watir::Browser.new :chrome
     browser = Watir::Browser.new :chrome, headless: true
 
-    row     = 3000
+    row     = 5000
     while worksheet_search[row, 1] != '' && Time.now.hour < 22
       if '' == worksheet_search[row, 3]
         ean     = worksheet_search[row, 1]
