@@ -1,4 +1,5 @@
 task :test_test => :environment do
+  # heroku run rake test_test
   puts "------------------------------"
   puts "------------------------------"
   puts "------------------------------"
