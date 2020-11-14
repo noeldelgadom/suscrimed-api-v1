@@ -119,7 +119,7 @@ module GoogleDriveModule
     # browser = Watir::Browser.new :chrome
     browser = Watir::Browser.new :chrome, headless: true
 
-    row     = 8914
+    row     = 2
     while worksheet_search[row, 1] != '' && Time.now.hour < 22
       begin
         if '' == worksheet_search[row, 3]
