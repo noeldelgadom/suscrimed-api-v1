@@ -1,0 +1,2 @@
+class IepsType < ApplicationRecord
+end

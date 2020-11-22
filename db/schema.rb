@@ -10,10 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_22_183539) do
+ActiveRecord::Schema.define(version: 2020_11_22_190712) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "ieps_types", force: :cascade do |t|
+    t.integer "percentage", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["percentage"], name: "index_ieps_types_on_percentage", unique: true
+  end
 
   create_table "iva_types", force: :cascade do |t|
     t.integer "percentage", null: false
