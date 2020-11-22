@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_22_190712) do
+ActiveRecord::Schema.define(version: 2020_11_22_220614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,4 +29,17 @@ ActiveRecord::Schema.define(version: 2020_11_22_190712) do
     t.index ["percentage"], name: "index_iva_types_on_percentage", unique: true
   end
 
+  create_table "tax_types", force: :cascade do |t|
+    t.string "name"
+    t.bigint "iva_type_id", null: false
+    t.bigint "ieps_type_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ieps_type_id"], name: "index_tax_types_on_ieps_type_id"
+    t.index ["iva_type_id"], name: "index_tax_types_on_iva_type_id"
+    t.index ["name"], name: "index_tax_types_on_name", unique: true
+  end
+
+  add_foreign_key "tax_types", "ieps_types"
+  add_foreign_key "tax_types", "iva_types"
 end
